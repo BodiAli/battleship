@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "battleship",
   "version": "1.0.0",
-  "description": "",
+  "description": "Battleship is a strategy guessing game where each player take turns to destroy the other's battle ships!",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -12,15 +12,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BodiAli/setup-code.git"
+    "url": "git+https://github.com/BodiAli/battleship.git"
   },
   "author": "Bodi Ali",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BodiAli/setup-code/issues"
+    "url": "https://github.com/BodiAli/battleship/issues"
   },
-  "homepage": "https://github.com/BodiAli/setup-code#readme",
+  "homepage": "https://github.com/BodiAli/battleship#readme",
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "babel-jest": "^29.7.0",
     "css-loader": "^6.10.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -28,13 +31,13 @@
     "eslint-plugin-import": "^2.29.1",
     "html-loader": "^5.0.0",
     "html-webpack-plugin": "^5.6.0",
+    "jest": "^29.7.0",
     "mini-css-extract-plugin": "^2.7.7",
     "postcss-loader": "^8.1.0",
     "postcss-preset-env": "^9.5.0",
     "sass": "^1.70.0",
     "sass-loader": "^14.1.0",
     "style-loader": "^3.3.4",
-    "jest": "^29.7.0",
     "webpack": "^5.90.0",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^5.10.0"

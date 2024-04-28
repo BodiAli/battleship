@@ -2,7 +2,6 @@ class Ship {
   constructor(length) {
     this.length = length;
     this.hitCount = 0;
-    this.position = [];
   }
 
   hit() {
@@ -11,10 +10,6 @@ class Ship {
 
   isSunk() {
     return this.hitCount >= this.length;
-  }
-
-  setPosition(x, y) {
-    this.position.push({ x, y });
   }
 }
 

@@ -30,9 +30,4 @@ describe("Ship tests:", () => {
     ship.hit();
     expect(ship.isSunk()).toBeTruthy();
   });
-
-  test("ships should be able to set their positions", () => {
-    ship.setPosition(2, 4);
-    expect(ship.position).toEqual([{ x: 2, y: 4 }]);
-  });
 });

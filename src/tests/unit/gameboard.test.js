@@ -6,18 +6,38 @@ describe("Gameboard tests:", () => {
   let ship2;
 
   const gameBoard = new Gameboard();
-  test("should place ships with specific coordinates by calling the ship setPosition", () => {
-    ship1 = new Ship(3);
-    ship1.setPosition(1, 3);
-    gameBoard.ships.push(ship1);
-    expect(gameBoard.ships[0].position).toEqual([{ x: 1, y: 3 }]);
+
+  test("Gameboard should have a coordinates system", () => {
+    expect(gameBoard.coordinates.length).toBe(100);
   });
 
-  test("should place ships with specific coordinates by calling the ship setPosition", () => {
+  test("should place ships with specific coordinates by calling placeShip", () => {
+    ship1 = new Ship(3);
+    const notPlacedShip = new Ship(3);
+
+    gameBoard.placeShip(ship1, 1, 3, "horizontal");
+
+    const isShipPlaced = gameBoard.coordinates.some((coord) => coord.ship === ship1);
+    const isNotPlacedShipPlaced = gameBoard.coordinates.some((coord) => coord.ship === notPlacedShip);
+
+    expect(isShipPlaced).toBeTruthy();
+    expect(isNotPlacedShipPlaced).toBeFalsy();
+  });
+
+  test("should not place ship if the coordinates are occupied by another ship or undefined coordinates", () => {
+    const ship = new Ship(1);
+    gameBoard.placeShip(ship, 1, 3, "vertical");
+    let isShipPlaced = gameBoard.coordinates.some((coord) => coord.ship === ship);
+    expect(isShipPlaced).toBeFalsy();
+    gameBoard.placeShip(ship, 11, 2, "vertical");
+    isShipPlaced = gameBoard.coordinates.some((coord) => coord.ship === ship);
+    expect(isShipPlaced).toBeFalsy();
+  });
+
+  test("should place ships with specific coordinates by calling placeShip", () => {
     ship2 = new Ship(4);
-    ship2.setPosition(4, 3);
-    gameBoard.ships.push(ship2);
-    expect(gameBoard.ships[1].position).toEqual([{ x: 4, y: 3 }]);
+    gameBoard.placeShip(ship2, 4, 3, "vertical");
+    expect(gameBoard.coordinates[32]).toEqual({ x: 4, y: 3, ship: ship2 });
   });
 
   describe("receiveAttack function", () => {
@@ -31,8 +51,7 @@ describe("Gameboard tests:", () => {
       expect(ship1.hitCount).toBe(1);
       expect(ship2.hitCount).toBe(1);
       const ship3 = new Ship(5);
-      ship3.setPosition(5, 1);
-      gameBoard.ships.push(ship3);
+      gameBoard.placeShip(ship3, 5, 1, "horizontal");
       gameBoard.receiveAttack(5, 1);
       gameBoard.receiveAttack(5, 1);
       gameBoard.receiveAttack(5, 1);

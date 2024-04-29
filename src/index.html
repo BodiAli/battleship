@@ -6,7 +6,7 @@
     <title>Battleship</title>
   </head>
   <body>
-    <div id="v-1">
+    <div id="v-1" class="removed">
       <header class="v-1">
         <h1>Battleship</h1>
       </header>
@@ -22,6 +22,30 @@
           <input type="text" name="name" id="name" />
           <button type="submit">START GAME</button>
         </form>
+      </main>
+    </div>
+    <div id="v-2">
+      <header class="v-2">
+        <h1>Battleship</h1>
+        <p>Place the ships</p>
+        <h3>Sound</h3>
+      </header>
+      <main class="v-3 p-vs-c">
+        <div class="grid-container1">
+          <div class="player-pieces"></div>
+          <div class="grid"></div>
+          <p>player grid</p>
+        </div>
+        <div class="grid-container2">
+          <div class="player-pieces"></div>
+          <div class="grid"></div>
+          <p>computer grid</p>
+        </div>
+        <div id="game-buttons">
+          <button id="p-vs-c-randomize">Randomize</button>
+          <button id="p-vs-c-reset">Reset</button>
+          <button id="p-vs-c-start">Start</button>
+        </div>
       </main>
     </div>
     <footer class="footer">

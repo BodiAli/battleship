@@ -7,17 +7,24 @@
   <script defer src="main.js"></script></head>
   <body>
     <div id="v-1">
-      <header>
+      <header class="v-1">
         <h1>Battleship</h1>
       </header>
-      <main>
-        <div>
-          <button>Player vs Player</button>
-          <button>Player vs Computer</button>
+      <main class="v-1">
+        <div class="pvs">
+          <button class="pvs-btn player">Player vs Player</button>
+          <button class="pvs-btn computer">Player vs Computer</button>
         </div>
       </main>
+      <main class="v-2 p-vs-c removed">
+        <form>
+          <h2>ENTER PLAYER NAME:</h2>
+          <input type="text" name="name" id="name" />
+          <button type="submit">START GAME</button>
+        </form>
+      </main>
     </div>
-    <footer>
+    <footer class="footer">
       <p>Created by Bodi Ali</p>
       <a href="https://github.com/BodiAli">Github</a>
     </footer>

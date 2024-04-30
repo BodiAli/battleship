@@ -6,7 +6,7 @@
     <title>Battleship</title>
   <script defer src="main.js"></script></head>
   <body>
-    <div id="v-1" class="removed">
+    <div id="v-1" class="">
       <header class="v-1">
         <h1>Battleship</h1>
       </header>
@@ -17,14 +17,14 @@
         </div>
       </main>
       <main class="v-2 p-vs-c removed">
-        <form>
+        <form id="p-vs-c-form">
           <h2>ENTER PLAYER NAME:</h2>
           <input type="text" name="name" id="name" />
-          <button type="submit">START GAME</button>
+          <button type="submit" id="p-vs-c-start">START GAME</button>
         </form>
       </main>
     </div>
-    <div id="v-2">
+    <div id="v-2" class="removed">
       <header class="v-2">
         <h1>Battleship</h1>
         <p>Place the ships</p>
@@ -93,6 +93,10 @@
           <button id="p-vs-c-randomize">Randomize</button>
           <button id="p-vs-c-reset">Reset</button>
           <button id="p-vs-c-start">Start</button>
+        </div>
+        <div id="restart-buttons">
+          <button id="restart-game">Restart Game</button>
+          <button id="main-menu">Main Menu</button>
         </div>
       </main>
     </div>

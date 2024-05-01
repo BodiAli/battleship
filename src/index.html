@@ -6,7 +6,7 @@
     <title>Battleship</title>
   </head>
   <body>
-    <div id="v-1" class="">
+    <div id="v-1" class="removed">
       <header class="v-1">
         <h1>Battleship</h1>
       </header>
@@ -19,12 +19,12 @@
       <main class="v-2 p-vs-c removed">
         <form id="p-vs-c-form">
           <h2>ENTER PLAYER NAME:</h2>
-          <input type="text" name="name" id="name" />
+          <input type="text" name="player-name" id="p-vs-c-name" />
           <button type="submit" id="p-vs-c-start">START GAME</button>
         </form>
       </main>
     </div>
-    <div id="v-2" class="removed">
+    <div id="v-2" class="">
       <header class="v-2">
         <h1>Battleship</h1>
         <p>Place the ships</p>
@@ -57,8 +57,8 @@
             <div class="letter">I</div>
             <div class="letter">J</div>
           </div>
-          <div class="grid"></div>
-          <p>player grid</p>
+          <div id="player-grid" class="grid"></div>
+          <p id="player-name"></p>
         </div>
         <div class="grid-container2">
           <div class="player-pieces"></div>
@@ -86,7 +86,7 @@
             <div class="letter">I</div>
             <div class="letter">J</div>
           </div>
-          <div class="grid"></div>
+          <div id="computer-grid" class="grid"></div>
           <p>computer grid</p>
         </div>
         <div id="game-buttons">

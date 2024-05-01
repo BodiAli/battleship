@@ -370,6 +370,10 @@ div.grid {
 .cell {
   outline: 1px solid #574142ab;
 }
+.cell-busy {
+  background-color: #58817f;
+  border: 2px solid #27504e;
+}
 
 .coords-num {
   display: flex;

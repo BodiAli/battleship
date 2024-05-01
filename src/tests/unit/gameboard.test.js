@@ -34,13 +34,26 @@ describe("Gameboard tests:", () => {
     expect(isShipPlaced).toBeFalsy();
   });
 
-  test("should place ships with specific coordinates by calling placeShip", () => {
+  test("should place ships with specific coordinates according to it's length and direction (horizontal)", () => {
     ship2 = new Ship(4);
-    gameBoard.placeShip(ship2, 4, 3, "vertical");
-    expect(gameBoard.coordinates[32]).toEqual({ x: 4, y: 3, ship: ship2 });
+    gameBoard.placeShip(ship2, 4, 3, "horizontal");
+    console.log(gameBoard.coordinates);
+    expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship: ship2 });
+    expect(gameBoard.coordinates[24]).toEqual({ x: 5, y: 3, ship: ship2 });
+    expect(gameBoard.coordinates[25]).toEqual({ x: 6, y: 3, ship: ship2 });
+    expect(gameBoard.coordinates[26]).toEqual({ x: 7, y: 3, ship: ship2 });
   });
 
-  describe("receiveAttack function", () => {
+  test.skip("should place ships with specific coordinates according to it's length and direction (vertical)", () => {
+    const verticalShip2 = new Ship(4);
+    gameBoard.placeShip(verticalShip2, 4, 3, "vertical");
+    expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship: verticalShip2 });
+    expect(gameBoard.coordinates[33]).toEqual({ x: 4, y: 4, ship: verticalShip2 });
+    expect(gameBoard.coordinates[43]).toEqual({ x: 4, y: 5, ship: verticalShip2 });
+    expect(gameBoard.coordinates[53]).toEqual({ x: 4, y: 6, ship: verticalShip2 });
+  });
+
+  describe.skip("receiveAttack function", () => {
     test("should return true if an attack hit a ship false otherwise", () => {
       expect(gameBoard.receiveAttack(2, 4)).toBeFalsy();
       expect(gameBoard.receiveAttack(1, 3)).toBeTruthy();

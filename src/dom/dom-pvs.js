@@ -22,7 +22,7 @@ const choosePlayerVs = {
       "transitionend",
       this.viewSecondVersionContainerContent.bind(this)
     );
-    this.playerVsComputerForm.addEventListener("submit", this.getPlayerName);
+    // this.playerVsComputerForm.addEventListener("submit", this.getPlayerName);
     this.mainMenuButton.addEventListener("click", this.backToMainMenu.bind(this));
   },
   init() {

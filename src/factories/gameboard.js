@@ -1,5 +1,3 @@
-import Ship from "./ship.js";
-
 class Gameboard {
   constructor() {
     this.ships = [];
@@ -7,7 +5,7 @@ class Gameboard {
     this.coordinates = [];
     for (let x = 1; x <= 10; x++) {
       for (let y = 1; y <= 10; y++) {
-        this.coordinates.push({ x, y, ship: null });
+        this.coordinates.push({ x, y, ship: null, isHit: false });
       }
     }
   }
@@ -17,6 +15,10 @@ class Gameboard {
   }
 
   placeShip(shipObject, xCoord, yCoord, direction) {
+    if (xCoord > 10 || xCoord <= 0 || yCoord > 10 || yCoord <= 0) {
+      console.log("Invalid ship placement: Ship should be placed at coordinates between 1 to 10");
+      return;
+    }
     const shipLength = shipObject.length;
     const shipPositions = [];
 
@@ -56,14 +58,21 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
+    if (x > 10 || x <= 0 || y > 10 || y <= 0) {
+      return "Invalid coordinates";
+    }
     let shipHit = false;
     this.coordinates.forEach((coords) => {
+      const coord = coords;
       if (coords.x === x && coords.y === y && coords.ship) {
         shipHit = true;
+        coord.isHit = true;
         coords.ship.hit();
       }
     });
     if (!shipHit) {
+      const targetCoord = this.coordinates.find((coord) => coord.x === x && coord.y === y);
+      targetCoord.isHit = true;
       this.missedCoordinates.push({ x, y });
     }
     return shipHit;
@@ -73,15 +82,5 @@ class Gameboard {
     return this.ships.every((ship) => ship.hitCount >= ship.length);
   }
 }
-const gameBoard = new Gameboard();
-const ship1 = new Ship(3);
 
-const ship2 = new Ship(4);
-const ship3 = new Ship(1);
-const ship4 = new Ship(4);
-
-gameBoard.placeShip(ship1, 1, 3, "horizontal");
-console.log(gameBoard.placeShip(ship3, 8, 3, "horizontal"));
-console.log(gameBoard.placeShip(ship2, 6, 3, "horizontal"));
-console.log(gameBoard.coordinates);
 export default Gameboard;

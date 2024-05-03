@@ -367,12 +367,60 @@ div.grid {
   display: grid;
   grid: repeat(10, 1fr) / repeat(10, 1fr);
 }
+
 .cell {
-  outline: 1px solid #574142ab;
+  border: 1px solid #574142ab;
 }
+
 .cell-busy {
   background-color: #58817f;
   border: 2px solid #27504e;
+}
+
+.cell-busy.hit {
+  background-color: rgba(255, 0, 0, 0.627);
+}
+.cell-busy.hit::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 5px;
+  background-color: #fff;
+  transform: rotate(-45deg) translate(-11px, 11px);
+}
+.cell-busy.hit::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 5px;
+  background-color: #fff;
+  transform: rotate(45deg) translate(8px, 7px);
+}
+
+.cell.miss {
+  background-color: #4a4949bc;
+}
+.cell.miss::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #000000cd;
+  transform: translate(17px, 16px);
+}
+
+.cell.adjacent {
+  background-color: rgba(156, 156, 156, 0.71);
+}
+.cell.adjacent::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #000000cd;
+  transform: translate(17px, 16px);
 }
 
 .coords-num {

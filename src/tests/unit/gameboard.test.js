@@ -46,19 +46,19 @@ describe("Gameboard tests:", () => {
     test("should place ships with specific coordinates according to it's length and direction (horizontal)", () => {
       const ship = new Ship(4);
       gameBoard.placeShip(ship, 4, 3, "horizontal");
-      expect(gameBoard.coordinates[32]).toEqual({ x: 4, y: 3, ship, isHit: false });
-      expect(gameBoard.coordinates[42]).toEqual({ x: 5, y: 3, ship, isHit: false });
-      expect(gameBoard.coordinates[52]).toEqual({ x: 6, y: 3, ship, isHit: false });
-      expect(gameBoard.coordinates[62]).toEqual({ x: 7, y: 3, ship, isHit: false });
+      expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship, isHit: false });
+      expect(gameBoard.coordinates[24]).toEqual({ x: 5, y: 3, ship, isHit: false });
+      expect(gameBoard.coordinates[25]).toEqual({ x: 6, y: 3, ship, isHit: false });
+      expect(gameBoard.coordinates[26]).toEqual({ x: 7, y: 3, ship, isHit: false });
     });
 
     test("should place ships with specific coordinates according to it's length and direction (vertical)", () => {
       const verticalShip2 = new Ship(4);
       gameBoard.placeShip(verticalShip2, 4, 3, "vertical");
-      expect(gameBoard.coordinates[32]).toEqual({ x: 4, y: 3, ship: verticalShip2, isHit: false });
+      expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship: verticalShip2, isHit: false });
       expect(gameBoard.coordinates[33]).toEqual({ x: 4, y: 4, ship: verticalShip2, isHit: false });
-      expect(gameBoard.coordinates[34]).toEqual({ x: 4, y: 5, ship: verticalShip2, isHit: false });
-      expect(gameBoard.coordinates[35]).toEqual({ x: 4, y: 6, ship: verticalShip2, isHit: false });
+      expect(gameBoard.coordinates[43]).toEqual({ x: 4, y: 5, ship: verticalShip2, isHit: false });
+      expect(gameBoard.coordinates[53]).toEqual({ x: 4, y: 6, ship: verticalShip2, isHit: false });
     });
   });
 
@@ -110,14 +110,31 @@ describe("Gameboard tests:", () => {
       gameBoard.receiveAttack(3, 4);
       gameBoard.receiveAttack(3, 5);
       expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship, isHit: true });
-      expect(gameBoard.coordinates[23]).toEqual({ x: 3, y: 4, ship, isHit: true });
-      expect(gameBoard.coordinates[24]).toEqual({ x: 3, y: 5, ship, isHit: true });
+      expect(gameBoard.coordinates[32]).toEqual({ x: 3, y: 4, ship, isHit: true });
+      expect(gameBoard.coordinates[42]).toEqual({ x: 3, y: 5, ship, isHit: true });
       gameBoard.receiveAttack(4, 4);
       gameBoard.receiveAttack(6, 6);
       gameBoard.receiveAttack(7, 7);
-      expect(gameBoard.coordinates[33]).toEqual({ x: 4, y: 4, ship: null, isHit: true });
+      expect(gameBoard.coordinates[33]).toEqual({ x: 4, y: 4, ship: null, isHit: true, isAdjacent: true });
       expect(gameBoard.coordinates[55]).toEqual({ x: 6, y: 6, ship: null, isHit: true });
       expect(gameBoard.coordinates[66]).toEqual({ x: 7, y: 7, ship: null, isHit: true });
+    });
+
+    test("receiveAttack should record adjacent coordinates of the attacked coordinate", () => {
+      const ship = new Ship(4);
+      gameBoard.placeShip(ship, 3, 3, "horizontal");
+      gameBoard.receiveAttack(3, 3);
+      gameBoard.receiveAttack(4, 3);
+      gameBoard.receiveAttack(5, 3);
+      gameBoard.receiveAttack(6, 3);
+      expect(gameBoard.coordinates[11]).toEqual({ x: 2, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[31]).toEqual({ x: 2, y: 4, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[12]).toEqual({ x: 3, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[32]).toEqual({ x: 3, y: 4, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[13]).toEqual({ x: 4, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[33]).toEqual({ x: 4, y: 4, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[14]).toEqual({ x: 5, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[34]).toEqual({ x: 5, y: 4, ship: null, isHit: false, isAdjacent: true });
     });
   });
 

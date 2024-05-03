@@ -10,7 +10,7 @@ describe("Testing integrating classes", () => {
     player2 = new Player();
   });
 
-  test("players should have a name and gameboard property", () => {
+  test("players should have a name and gameBoard property", () => {
     expect(player1.name).toBe("bodi");
     expect(player2.name).toBe("");
     expect(player1.gameBoard).toEqual(new Gameboard());
@@ -31,8 +31,8 @@ describe("Testing integrating classes", () => {
       const ship2 = new Ship(3);
       player1.gameBoard.placeShip(ship1, 7, 8, "horizontal");
       player2.gameBoard.placeShip(ship2, 3, 3, "vertical");
-      expect(player1.gameBoard.coordinates[67]).toEqual({ x: 7, y: 8, ship: ship1, isHit: false });
-      expect(player2.gameBoard.coordinates[67]).toEqual({ x: 7, y: 8, ship: null, isHit: false });
+      expect(player1.gameBoard.coordinates[76]).toEqual({ x: 7, y: 8, ship: ship1, isHit: false });
+      expect(player2.gameBoard.coordinates[76]).toEqual({ x: 7, y: 8, ship: null, isHit: false });
     });
 
     test("attacking ships is separate for each player", () => {

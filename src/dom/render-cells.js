@@ -2,19 +2,22 @@ import choosePlayerVs from "./dom-pvs.js";
 
 function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
   gameBoardObj1.coordinates.forEach((cell) => {
+    const arr = Array.from(domCells1);
     if (cell.ship !== null && cell.isHit === false) {
-      const arr = Array.from(domCells1);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
       targetCell.classList.add("cell-busy");
     } else if (cell.ship !== null && cell.isHit === true) {
-      const arr = Array.from(domCells1);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
       targetCell.classList.add("cell-busy");
       targetCell.classList.add("hit");
+      targetCell.isHit = true;
     } else if (cell.isAdjacent === true) {
-      const arr = Array.from(domCells1);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
       targetCell.classList.add("adjacent");
+      if (!targetCell.classList.contains("miss")) {
+        targetCell.classList.add("adjacent");
+      }
+      targetCell.isAdjacent = true;
     }
   });
 
@@ -22,29 +25,28 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
   gameBoardObj1.missedCoordinates.forEach((coord) => {
     const arr = Array.from(domCells1);
     const targetCell = arr.find((domCell) => domCell.coord.x === coord.x && domCell.coord.y === coord.y);
+    targetCell.isHit = true;
     targetCell.classList.add("miss");
   });
 
   gameBoardObj2.coordinates.forEach((cell) => {
+    const arr = Array.from(domCells2);
     if (cell.ship !== null && cell.isHit === false) {
       if (choosePlayerVs.playerVsPlayer) {
-        const arr = Array.from(domCells2);
         const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
         targetCell.classList.add("cell-busy");
       }
     } else if (cell.ship !== null && cell.isHit === true) {
-      const arr = Array.from(domCells2);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
       targetCell.classList.add("cell-busy");
       targetCell.classList.add("hit");
-    } else if (cell.ship === null && cell.isHit === true) {
-      const arr = Array.from(domCells2);
-      const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
-      targetCell.classList.add("miss");
+      targetCell.isHit = true;
     } else if (cell.isAdjacent === true) {
-      const arr = Array.from(domCells2);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
-      targetCell.classList.add("adjacent");
+      if (!targetCell.classList.contains("miss")) {
+        targetCell.classList.add("adjacent");
+      }
+      targetCell.isAdjacent = true;
     }
   });
 
@@ -52,6 +54,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
   gameBoardObj2.missedCoordinates.forEach((coord) => {
     const arr = Array.from(domCells2);
     const targetCell = arr.find((domCell) => domCell.coord.x === coord.x && domCell.coord.y === coord.y);
+    targetCell.isHit = true;
     targetCell.classList.add("miss");
   });
 }

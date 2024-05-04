@@ -136,6 +136,26 @@ describe("Gameboard tests:", () => {
       expect(gameBoard.coordinates[14]).toEqual({ x: 5, y: 2, ship: null, isHit: false, isAdjacent: true });
       expect(gameBoard.coordinates[34]).toEqual({ x: 5, y: 4, ship: null, isHit: false, isAdjacent: true });
     });
+
+    test("when a ship is destroyed all adjacent coordinates are recorded as isAdjacent: true", () => {
+      const ship = new Ship(3);
+      gameBoard.placeShip(ship, 2, 2, "vertical");
+      gameBoard.receiveAttack(2, 2);
+      gameBoard.receiveAttack(2, 3);
+      gameBoard.receiveAttack(2, 4);
+      expect(gameBoard.coordinates[0]).toEqual({ x: 1, y: 1, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[10]).toEqual({ x: 1, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[20]).toEqual({ x: 1, y: 3, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[30]).toEqual({ x: 1, y: 4, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[40]).toEqual({ x: 1, y: 5, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[41]).toEqual({ x: 2, y: 5, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[2]).toEqual({ x: 3, y: 1, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[12]).toEqual({ x: 3, y: 2, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[32]).toEqual({ x: 3, y: 4, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[42]).toEqual({ x: 3, y: 5, ship: null, isHit: false, isAdjacent: true });
+      expect(gameBoard.coordinates[1]).toEqual({ x: 2, y: 1, ship: null, isHit: false, isAdjacent: true });
+    });
   });
 
   test("should return true if all ships sunk false otherwise", () => {

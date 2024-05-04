@@ -1,3 +1,5 @@
+import Ship from "./ship.js";
+
 class Gameboard {
   constructor() {
     this.ships = [];
@@ -55,6 +57,50 @@ class Gameboard {
       coordinate.ship = shipObject;
     });
     this.ships.push(shipObject);
+  }
+
+  placeShipRandom(shipObject) {
+    const shipLength = shipObject.length;
+    let isValidPlacement = false;
+
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const direction = Math.random() < 0.5 ? "horizontal" : "vertical";
+      const randomX = Math.floor(Math.random() * 10) + 1;
+      const randomY = Math.floor(Math.random() * 10) + 1;
+
+      if (this.canPlaceShip(shipLength, randomX, randomY, direction)) {
+        this.placeShip(shipObject, randomX, randomY, direction);
+        isValidPlacement = true;
+        break;
+      }
+    }
+    if (!isValidPlacement) {
+      console.log("Unable to place ship after 100 attempts");
+    }
+  }
+
+  canPlaceShip(shipLength, xCoord, yCoord, direction) {
+    if (
+      (direction === "horizontal" && xCoord + shipLength - 1 > 10) ||
+      (direction === "vertical" && yCoord + shipLength - 1 > 10)
+    ) {
+      return false;
+    }
+    for (let i = 0; i < shipLength; i++) {
+      const x = direction === "horizontal" ? xCoord + i : xCoord;
+      const y = direction === "vertical" ? yCoord + i : yCoord;
+      if (
+        this.isCoordOccupied(x, y) ||
+        this.isCoordOccupied(x - 1, y) ||
+        this.isCoordOccupied(x + 1, y) ||
+        this.isCoordOccupied(x, y - 1) ||
+        this.isCoordOccupied(x, y + 1)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   receiveAttack(x, y) {
@@ -149,4 +195,13 @@ class Gameboard {
   }
 }
 
+const gameBoard = new Gameboard();
+const ship = new Ship(4);
+const ship2 = new Ship(3);
+const ship3 = new Ship(3);
+const ship4 = new Ship(3);
+gameBoard.placeShipRandom(ship);
+gameBoard.placeShipRandom(ship2);
+gameBoard.placeShipRandom(ship3);
+gameBoard.placeShipRandom(ship4);
 export default Gameboard;

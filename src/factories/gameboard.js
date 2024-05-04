@@ -1,5 +1,3 @@
-import Ship from "./ship.js";
-
 class Gameboard {
   constructor() {
     this.ships = [];

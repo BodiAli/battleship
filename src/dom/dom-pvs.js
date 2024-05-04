@@ -68,3 +68,4 @@ const choosePlayerVs = {
 };
 
 choosePlayerVs.init();
+export default choosePlayerVs;

@@ -42,19 +42,21 @@ class Dom {
     this.player1 = players.player1;
     this.player2 = players.player2;
 
-    this.player2.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "vertical");
+    this.player2.gameBoard.placeShipRandom(this.game.getShips().shipLength4);
+    this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
+    this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
+    this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
     this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "vertical");
   }
 
   static attackOpponent(ev) {
     if (!this.isGameOver()) {
       const cell = ev.target;
-      if (!cell.isHit) {
+      if (!cell.isHit && !cell.isAdjacent) {
         this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
         console.log(cell);
       }
-      cell.isHit = true;
       if (this.isGameOver()) {
         ev.preventDefault();
       }

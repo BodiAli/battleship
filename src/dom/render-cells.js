@@ -1,3 +1,5 @@
+import choosePlayerVs from "./dom-pvs.js";
+
 function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
   gameBoardObj1.coordinates.forEach((cell) => {
     if (cell.ship !== null && cell.isHit === false) {
@@ -25,9 +27,11 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
 
   gameBoardObj2.coordinates.forEach((cell) => {
     if (cell.ship !== null && cell.isHit === false) {
-      const arr = Array.from(domCells2);
-      const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
-      targetCell.classList.add("cell-busy");
+      if (choosePlayerVs.playerVsPlayer) {
+        const arr = Array.from(domCells2);
+        const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
+        targetCell.classList.add("cell-busy");
+      }
     } else if (cell.ship !== null && cell.isHit === true) {
       const arr = Array.from(domCells2);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
@@ -37,6 +41,10 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
       const arr = Array.from(domCells2);
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
       targetCell.classList.add("miss");
+    } else if (cell.isAdjacent === true) {
+      const arr = Array.from(domCells2);
+      const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
+      targetCell.classList.add("adjacent");
     }
   });
 

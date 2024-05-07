@@ -3,8 +3,8 @@ import driveGame from "../../drive-game.js";
 describe("driveGame function", () => {
   test("driveGame should get player names", () => {
     const game = driveGame();
-    const players = game.getPlayers("Bodi", "Mazen");
-    expect(players.player1.name).toMatch("Bodi");
+    const players = game.getPlayers("Mody", "Mazen");
+    expect(players.player1.name).toMatch("Mody");
     expect(players.player2.name).toMatch("Mazen");
   });
 

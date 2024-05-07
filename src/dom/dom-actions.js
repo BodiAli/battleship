@@ -56,11 +56,20 @@ class Dom {
         this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
         console.log(cell);
+        setTimeout(() => {
+          this.computerAttack();
+        }, 300);
       }
       if (this.isGameOver()) {
         ev.preventDefault();
       }
     }
+  }
+
+  static computerAttack() {
+    this.player1.gameBoard.receiveAttackRandom();
+    console.log(this.player1.gameBoard.coordinates);
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
   }
 
   static isGameOver() {

@@ -13,7 +13,6 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
       targetCell.isHit = true;
     } else if (cell.isAdjacent === true) {
       const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
-      targetCell.classList.add("adjacent");
       if (!targetCell.classList.contains("miss")) {
         targetCell.classList.add("adjacent");
       }

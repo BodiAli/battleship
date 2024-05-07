@@ -61,21 +61,17 @@ class Gameboard {
 
   placeShipRandom(shipObject) {
     const shipLength = shipObject.length;
-    let isValidPlacement = false;
+    let direction;
+    let randomX;
+    let randomY;
+    do {
+      direction = Math.random() < 0.5 ? "horizontal" : "vertical";
+      randomX = Math.floor(Math.random() * 10) + 1;
+      randomY = Math.floor(Math.random() * 10) + 1;
+    } while (!this.canPlaceShip(shipLength, randomX, randomY, direction));
 
-    for (let attempt = 0; attempt < 100; attempt++) {
-      const direction = Math.random() < 0.5 ? "horizontal" : "vertical";
-      const randomX = Math.floor(Math.random() * 10) + 1;
-      const randomY = Math.floor(Math.random() * 10) + 1;
-
-      if (this.canPlaceShip(shipLength, randomX, randomY, direction)) {
-        this.placeShip(shipObject, randomX, randomY, direction);
-        isValidPlacement = true;
-        break;
-      }
-    }
-    if (!isValidPlacement) {
-      console.log("Unable to place ship after 100 attempts");
+    if (this.canPlaceShip(shipLength, randomX, randomY, direction)) {
+      this.placeShip(shipObject, randomX, randomY, direction);
     }
   }
 
@@ -109,15 +105,15 @@ class Gameboard {
     }
 
     let shipHit = false;
-    this.coordinates.forEach((coords) => {
-      const coord = coords;
-      if (coords.x === x && coords.y === y && coords.ship) {
+    this.coordinates.forEach((coordinate) => {
+      const coord = coordinate;
+      if (coord.x === x && coord.y === y && coord.ship && !coord.isHit && !coord.isAdjacent) {
         shipHit = true;
         coord.isHit = true;
-        coords.ship.hit();
+        coord.ship.hit();
         this.triggerAdjacentCoordinates(x, y);
-        if (coords.ship.isSunk()) {
-          this.markAdjacentCoordinates(coords.ship);
+        if (coord.ship.isSunk()) {
+          this.markAdjacentCoordinates(coord.ship);
         }
       }
     });
@@ -127,6 +123,48 @@ class Gameboard {
       this.missedCoordinates.push({ x, y });
     }
     return shipHit;
+  }
+
+  async receiveAttackRandom() {
+    let shipHit = false;
+    let randomX;
+    let randomY;
+    do {
+      randomX = Math.floor(Math.random() * 10) + 1;
+      randomY = Math.floor(Math.random() * 10) + 1;
+    } while (this.isHitOrAdjacent(randomX, randomY));
+
+    const targetCoord1 = this.coordinates.find(
+      (coord) => coord.x === randomX && coord.y === randomY && !coord.isHit && !coord.isAdjacent
+    );
+
+    targetCoord1.isHit = true;
+    if (targetCoord1.ship) {
+      shipHit = true;
+      targetCoord1.ship.hit();
+      this.triggerAdjacentCoordinates(randomX, randomY);
+
+      new Promise(() => {
+        setTimeout(() => {}, 300);
+      }).then((val) => {
+        this.receiveAttackRandom();
+      });
+
+      if (targetCoord1.ship.isSunk()) {
+        this.markAdjacentCoordinates(targetCoord1.ship);
+      }
+    }
+
+    if (!shipHit) {
+      const targetCoord = this.coordinates.find((coord) => coord.x === randomX && coord.y === randomY);
+      targetCoord.isHit = true;
+      this.missedCoordinates.push({ x: randomX, y: randomY });
+    }
+  }
+
+  isHitOrAdjacent(x, y) {
+    const targetCoord = this.coordinates.find((coord) => coord.x === x && coord.y === y);
+    return targetCoord && (targetCoord.isHit || targetCoord.isAdjacent);
   }
 
   isAllSunk() {

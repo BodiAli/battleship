@@ -5,6 +5,8 @@ import choosePlayerVs from "./dom-pvs.js";
 
 class Dom {
   static init() {
+    this.player1Turn = true;
+    this.player2Turn = false;
     this.game = driveGame();
     choosePlayerVs.playerVsComputer = true;
     this.getPlayers();
@@ -47,15 +49,18 @@ class Dom {
     this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
     this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
     this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "vertical");
+    this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 5, 3, "horizontal");
   }
 
   static attackOpponent(ev) {
-    if (!this.isGameOver()) {
+    if (!this.isGameOver() && this.player1Turn) {
       const cell = ev.target;
       if (!cell.isHit && !cell.isAdjacent) {
         this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
         console.log(cell);
+        this.player2Turn = true;
+        this.player1Turn = false;
         setTimeout(() => {
           this.computerAttack();
         }, 300);
@@ -67,9 +72,13 @@ class Dom {
   }
 
   static computerAttack() {
-    this.player1.gameBoard.receiveAttackRandom();
-    console.log(this.player1.gameBoard.coordinates);
-    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    if (this.player2Turn) {
+      this.player1.gameBoard.receiveAttackRandom();
+      console.log(this.player1.gameBoard.coordinates);
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+      this.player1Turn = true;
+      this.player2Turn = false;
+    }
   }
 
   static isGameOver() {

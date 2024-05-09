@@ -178,6 +178,29 @@ describe("Gameboard tests:", () => {
       gameBoard.receiveAttackRandom();
       expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship, isHit: true });
     });
+
+    test("if receiveAttackRandom hits a ship it will save that ship and it's adjacent positions (up, down, left, right)", () => {
+      const MathMock = Object.create(global.Math);
+      MathMock.random = jest.fn(() => 0.2);
+      global.Math = MathMock;
+
+      const ship = new Ship(3);
+      gameBoard.placeShip(ship, 3, 3, "horizontal");
+      gameBoard.receiveAttackRandom();
+      expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship, isHit: true });
+      expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship, isHit: true });
+      expect(gameBoard.coordinates[24]).toEqual({ x: 5, y: 3, ship, isHit: true });
+    });
+
+    test("the computer will keep trying to guess the ships adjacent positions and attack them", () => {
+      const MathMock = Object.create(global.Math);
+      MathMock.random = jest.fn(() => 0.2);
+      global.Math = MathMock;
+
+      const ship = new Ship(3);
+      gameBoard.placeShip(ship, 3, 3, "horizontal");
+      gameBoard.receiveAttackRandom();
+    });
   });
 
   test("should return true if all ships sunk false otherwise", () => {

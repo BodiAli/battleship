@@ -1,9 +1,7 @@
-import Ship from "./ship.js";
-
 class Gameboard {
   constructor() {
     this.ships = [];
-    this.shipsToAttackForComputer = [];
+    this.adjacentPositionsToAttackForComputer = [];
     this.missedCoordinates = [];
     this.coordinates = [];
     for (let y = 1; y <= 10; y++) {
@@ -121,12 +119,20 @@ class Gameboard {
     if (!shipHit) {
       const targetCoord = this.coordinates.find((coord) => coord.x === x && coord.y === y);
       targetCoord.isHit = true;
-      this.missedCoordinates.push({ x, y });
+      this.missedCoordinates.push(targetCoord);
     }
     return shipHit;
   }
 
   receiveAttackRandom() {
+    if (
+      this.adjacentPositionsToAttackForComputer.some(
+        (val) => val.potentialAdjacentPosition && !this.isHitOrAdjacent(val.x, val.y)
+      )
+    ) {
+      this.attackAdjacentShipPositions();
+      return;
+    }
     let shipHit = false;
     let randomX;
     let randomY;
@@ -143,65 +149,72 @@ class Gameboard {
     if (coordinate.ship) {
       shipHit = true;
       coordinate.ship.hit();
-      this.recordAdjacentPositions(coordinate.x, coordinate.y);
       this.triggerAdjacentCoordinates(randomX, randomY);
+      this.recordAdjacentPositions(coordinate.x, coordinate.y);
       if (coordinate.ship.isSunk()) {
         this.markAdjacentCoordinates(coordinate.ship);
       }
-      this.attackAdjacentShipPositions();
     }
 
     if (!shipHit) {
-      const targetCoord = this.coordinates.find((coord) => coord.x === randomX && coord.y === randomY);
-      targetCoord.isHit = true;
-      this.missedCoordinates.push({ x: randomX, y: randomY });
+      this.missedCoordinates.push(coordinate);
     }
   }
 
   recordAdjacentPositions(x, y) {
-    this.shipsToAttackForComputer.push({ x, y });
-    const adjacentPositions = [];
-    this.shipsToAttackForComputer.forEach((coordinate) => {
+    const shipPosition = [];
+    shipPosition.push({ x, y });
+    shipPosition.forEach((coordinate) => {
       const shipCoordinate = coordinate;
-      const up = { x: coordinate.x, y: coordinate.y - 1, potentialAdjacentPosition: true };
-      const down = { x: coordinate.x, y: coordinate.y + 1, potentialAdjacentPosition: true };
-      const left = { x: coordinate.x - 1, y: coordinate.y, potentialAdjacentPosition: true };
-      const right = { x: coordinate.x + 1, y: coordinate.y, potentialAdjacentPosition: true };
+      const up = this.coordinates.find((val) => val.x === shipCoordinate.x && val.y === shipCoordinate.y - 1);
+      const down = this.coordinates.find(
+        (val) => val.x === shipCoordinate.x && val.y === shipCoordinate.y + 1
+      );
+      const left = this.coordinates.find(
+        (val) => val.x === shipCoordinate.x - 1 && val.y === shipCoordinate.y
+      );
+      const right = this.coordinates.find(
+        (val) => val.x === shipCoordinate.x + 1 && val.y === shipCoordinate.y
+      );
       if (!this.isHitOrAdjacent(up.x, up.y)) {
-        adjacentPositions.push(up);
+        up.potentialAdjacentPosition = true;
+        this.adjacentPositionsToAttackForComputer.push(up);
       }
       if (!this.isHitOrAdjacent(down.x, down.y)) {
-        adjacentPositions.push(down);
+        down.potentialAdjacentPosition = true;
+        this.adjacentPositionsToAttackForComputer.push(down);
       }
       if (!this.isHitOrAdjacent(left.x, left.y)) {
-        adjacentPositions.push(left);
+        left.potentialAdjacentPosition = true;
+        this.adjacentPositionsToAttackForComputer.push(left);
       }
       if (!this.isHitOrAdjacent(right.x, right.y)) {
-        adjacentPositions.push(right);
+        right.potentialAdjacentPosition = true;
+        this.adjacentPositionsToAttackForComputer.push(right);
       }
-      shipCoordinate.adjacentPositions = adjacentPositions;
     });
   }
 
   attackAdjacentShipPositions() {
-    // TODO: implement a method to loop through adjacent positions and then attack the coordinate that has potentialAdjacentPosition: true: send a hit method if it's a ship or toggle potentialAdjacentPosition: --> false if it's not
-    this.shipsToAttackForComputer.forEach((coordinate) => {
-      coordinate.potentialAdjacentPosition.forEach((adjacentPosition) => {});
-    });
+    const adjacentPosition = this.adjacentPositionsToAttackForComputer.find(
+      (val) => val.potentialAdjacentPosition && !val.isHit && !val.isAdjacent
+    );
+    if (adjacentPosition) {
+      const targetCoord = this.coordinates.find(
+        (value) => value.x === adjacentPosition.x && value.y === adjacentPosition.y
+      );
 
-    // if (adjacentCoord && !adjacentCoord.isHit) {
-    //   if (adjacentCoord.ship) {
-    //     adjacentCoord.ship.hit();
-    //     adjacentCoord.isHit = true;
-    //     this.triggerAdjacentCoordinates(adjacentCoord.x, adjacentCoord.y);
-    //     if (adjacentCoord.ship.isSunk()) {
-    //       this.markAdjacentCoordinates(adjacentCoord.ship);
-    //     }
-    //   } else {
-    //     adjacentCoord.isHit = true;
-    //     this.missedCoordinates.push({ x: adjacentCoord.x, y: adjacentCoord.y });
-    //   }
-    // }
+      if (targetCoord.ship) {
+        this.receiveAttack(targetCoord.x, targetCoord.y);
+        this.recordAdjacentPositions(targetCoord.x, targetCoord.y);
+        adjacentPosition.potentialAdjacentPosition = false;
+        return;
+      }
+      if (!targetCoord.ship) {
+        this.receiveAttack(targetCoord.x, targetCoord.y);
+        adjacentPosition.potentialAdjacentPosition = false;
+      }
+    }
   }
 
   isHitOrAdjacent(x, y) {
@@ -275,9 +288,4 @@ class Gameboard {
   }
 }
 
-const gameBoard = new Gameboard();
-const ship = new Ship(4);
-gameBoard.placeShip(ship, 3, 3, "horizontal");
-gameBoard.receiveAttackRandom();
-console.log(gameBoard.coordinates);
 export default Gameboard;

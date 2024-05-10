@@ -60,6 +60,17 @@ describe("Gameboard tests:", () => {
       expect(gameBoard.coordinates[43]).toEqual({ x: 4, y: 5, ship: verticalShip2, isHit: false });
       expect(gameBoard.coordinates[53]).toEqual({ x: 4, y: 6, ship: verticalShip2, isHit: false });
     });
+
+    test("placeShipRandom places a ship at a valid random position", () => {
+      const MathMock = Object.create(global.Math);
+      MathMock.random = jest.fn(() => 0.5);
+      global.Math = MathMock;
+
+      const ship = new Ship(3);
+      gameBoard.canPlaceShip = jest.fn(() => true);
+      gameBoard.placeShipRandom(ship);
+      expect(gameBoard.coordinates[55]).toEqual({ x: 6, y: 6, ship, isHit: false });
+    });
   });
 
   describe("receiveAttack method", () => {
@@ -88,6 +99,16 @@ describe("Gameboard tests:", () => {
       expect(ship3.isSunk()).toBeTruthy();
     });
 
+    test("receiveAttack should not send a hit function to the ship if coordinates have been attacked before", () => {
+      const ship = new Ship(3);
+      gameBoard.placeShip(ship, 3, 3, "horizontal");
+      expect(ship.hitCount).toBe(0);
+      gameBoard.receiveAttack(3, 3);
+      gameBoard.receiveAttack(3, 3);
+      gameBoard.receiveAttack(3, 3);
+      expect(ship.hitCount).toBe(1);
+    });
+
     test("receiveAttack should record the coordinates of missed attacks", () => {
       const ship = new Ship(2);
       gameBoard.placeShip(ship, 6, 1, "vertical");
@@ -97,9 +118,9 @@ describe("Gameboard tests:", () => {
       gameBoard.receiveAttack(1, 1);
       gameBoard.receiveAttack(6, 2);
       expect(gameBoard.missedCoordinates).toEqual([
-        { x: 2, y: 1 },
-        { x: 5, y: 5 },
-        { x: 1, y: 1 },
+        { x: 2, y: 1, isHit: true, ship: null },
+        { x: 5, y: 5, isHit: true, ship: null },
+        { x: 1, y: 1, isHit: true, ship: null },
       ]);
     });
 
@@ -157,17 +178,6 @@ describe("Gameboard tests:", () => {
       expect(gameBoard.coordinates[1]).toEqual({ x: 2, y: 1, ship: null, isHit: false, isAdjacent: true });
     });
 
-    test("placeShipRandom places a ship at a valid random position", () => {
-      const MathMock = Object.create(global.Math);
-      MathMock.random = jest.fn(() => 0.5);
-      global.Math = MathMock;
-
-      const ship = new Ship(3);
-      gameBoard.canPlaceShip = jest.fn(() => true);
-      gameBoard.placeShipRandom(ship);
-      expect(gameBoard.coordinates[55]).toEqual({ x: 6, y: 6, ship, isHit: false });
-    });
-
     test("receiveAttackRandom attacks a valid random coordinate", () => {
       const MathMock = Object.create(global.Math);
       MathMock.random = jest.fn(() => 0.2);
@@ -188,8 +198,34 @@ describe("Gameboard tests:", () => {
       gameBoard.placeShip(ship, 3, 3, "horizontal");
       gameBoard.receiveAttackRandom();
       expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship, isHit: true });
-      expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship, isHit: true });
-      expect(gameBoard.coordinates[24]).toEqual({ x: 5, y: 3, ship, isHit: true });
+      expect(gameBoard.coordinates[23]).toEqual({
+        x: 4,
+        y: 3,
+        ship,
+        isHit: false,
+        potentialAdjacentPosition: true,
+      });
+      expect(gameBoard.coordinates[21]).toEqual({
+        x: 2,
+        y: 3,
+        ship: null,
+        isHit: false,
+        potentialAdjacentPosition: true,
+      });
+      expect(gameBoard.coordinates[12]).toEqual({
+        x: 3,
+        y: 2,
+        ship: null,
+        isHit: false,
+        potentialAdjacentPosition: true,
+      });
+      expect(gameBoard.coordinates[32]).toEqual({
+        x: 3,
+        y: 4,
+        ship: null,
+        isHit: false,
+        potentialAdjacentPosition: true,
+      });
     });
 
     test("the computer will keep trying to guess the ships adjacent positions and attack them", () => {
@@ -200,6 +236,14 @@ describe("Gameboard tests:", () => {
       const ship = new Ship(3);
       gameBoard.placeShip(ship, 3, 3, "horizontal");
       gameBoard.receiveAttackRandom();
+      gameBoard.receiveAttackRandom();
+      gameBoard.receiveAttackRandom();
+      gameBoard.receiveAttackRandom();
+      gameBoard.receiveAttackRandom();
+      gameBoard.receiveAttackRandom();
+      expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship, isHit: true });
+      expect(gameBoard.coordinates[23].isHit).toBeTruthy();
+      expect(gameBoard.coordinates[24].isHit).toBeTruthy();
     });
   });
 

@@ -44,7 +44,11 @@ class Gameboard {
         this.isCoordOccupied(x - 1, y) ||
         this.isCoordOccupied(x + 1, y) ||
         this.isCoordOccupied(x, y - 1) ||
-        this.isCoordOccupied(x, y + 1)
+        this.isCoordOccupied(x, y + 1) ||
+        this.isCoordOccupied(x + 1, y + 1) ||
+        this.isCoordOccupied(x - 1, y - 1) ||
+        this.isCoordOccupied(x + 1, y - 1) ||
+        this.isCoordOccupied(x - 1, y + 1)
       ) {
         console.log("Invalid ship placement: Adjacent coordinates already have ships.");
         return;
@@ -89,7 +93,11 @@ class Gameboard {
         this.isCoordOccupied(x - 1, y) ||
         this.isCoordOccupied(x + 1, y) ||
         this.isCoordOccupied(x, y - 1) ||
-        this.isCoordOccupied(x, y + 1)
+        this.isCoordOccupied(x, y + 1) ||
+        this.isCoordOccupied(x + 1, y + 1) ||
+        this.isCoordOccupied(x - 1, y - 1) ||
+        this.isCoordOccupied(x + 1, y - 1) ||
+        this.isCoordOccupied(x - 1, y + 1)
       ) {
         return false;
       }
@@ -176,19 +184,19 @@ class Gameboard {
       const right = this.coordinates.find(
         (val) => val.x === shipCoordinate.x + 1 && val.y === shipCoordinate.y
       );
-      if (!this.isHitOrAdjacent(up.x, up.y)) {
+      if (up && !this.isHitOrAdjacent(up.x, up.y)) {
         up.potentialAdjacentPosition = true;
         this.adjacentPositionsToAttackForComputer.push(up);
       }
-      if (!this.isHitOrAdjacent(down.x, down.y)) {
+      if (down && !this.isHitOrAdjacent(down.x, down.y)) {
         down.potentialAdjacentPosition = true;
         this.adjacentPositionsToAttackForComputer.push(down);
       }
-      if (!this.isHitOrAdjacent(left.x, left.y)) {
+      if (left && !this.isHitOrAdjacent(left.x, left.y)) {
         left.potentialAdjacentPosition = true;
         this.adjacentPositionsToAttackForComputer.push(left);
       }
-      if (!this.isHitOrAdjacent(right.x, right.y)) {
+      if (right && !this.isHitOrAdjacent(right.x, right.y)) {
         right.potentialAdjacentPosition = true;
         this.adjacentPositionsToAttackForComputer.push(right);
       }

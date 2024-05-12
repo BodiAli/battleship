@@ -138,8 +138,7 @@ class Gameboard {
         (val) => val.potentialAdjacentPosition && !this.isHitOrAdjacent(val.x, val.y)
       )
     ) {
-      this.attackAdjacentShipPositions();
-      return;
+      return this.attackAdjacentShipPositions();
     }
     let shipHit = false;
     let randomX;
@@ -167,6 +166,7 @@ class Gameboard {
     if (!shipHit) {
       this.missedCoordinates.push(coordinate);
     }
+    return shipHit;
   }
 
   recordAdjacentPositions(x, y) {
@@ -204,6 +204,7 @@ class Gameboard {
   }
 
   attackAdjacentShipPositions() {
+    let shipHit = false;
     const adjacentPosition = this.adjacentPositionsToAttackForComputer.find(
       (val) => val.potentialAdjacentPosition && !val.isHit && !val.isAdjacent
     );
@@ -216,13 +217,14 @@ class Gameboard {
         this.receiveAttack(targetCoord.x, targetCoord.y);
         this.recordAdjacentPositions(targetCoord.x, targetCoord.y);
         adjacentPosition.potentialAdjacentPosition = false;
-        return;
+        shipHit = true;
       }
       if (!targetCoord.ship) {
         this.receiveAttack(targetCoord.x, targetCoord.y);
         adjacentPosition.potentialAdjacentPosition = false;
       }
     }
+    return shipHit;
   }
 
   isHitOrAdjacent(x, y) {

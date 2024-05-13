@@ -17,7 +17,7 @@ body {
   background-color: var(--main-bg);
   display: grid;
   grid-template-columns: repeat(2, fr);
-  grid-template-rows: 10fr 0.5fr;
+  grid-template-rows: 10fr 0.6fr;
 }
 
 #v-1 {
@@ -171,6 +171,7 @@ main.v-2.p-vs-c form > button:active {
   color: rgba(255, 255, 255, 0.424);
   background-color: white;
 }
+
 div.pvs {
   display: flex;
   align-items: center;
@@ -283,15 +284,46 @@ main.v-3.p-vs-c > div#game-buttons {
 main.v-3.p-vs-c > div.grid-container1 {
   grid-area: 1 / 1 / 2 / 2;
   display: grid;
-  grid-template-columns: 0.5fr 0.1fr 1fr;
+  grid-template-columns: 1fr 0.1fr 1fr;
   grid-template-rows: 0.1fr 2fr 0.1fr;
   gap: 2px;
+  justify-content: end;
 }
 
 div.grid-container1 > .player-pieces {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0 1.3rem;
+}
+.ship-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.player-pieces > .ship-container > div {
+  height: 2.4rem;
+  display: flex;
+}
+.player-pieces > .ship-container > div > div {
+  background-color: #58817f;
+  border: 2px solid #27504e;
+}
+.ship-container > p {
+  text-align: center;
+}
+.ship-container > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.ship-container > div > div {
+  height: 100%;
+  width: 24%;
 }
 
 div.grid-container1 > .coords-num {
@@ -320,13 +352,6 @@ main.v-3.p-vs-c > div.grid-container2 {
   grid-template-rows: 0.1fr 2fr 0.1fr;
   gap: 2px;
   justify-content: end;
-}
-
-div.grid-container2 > .player-pieces {
-  grid-column: 3 / 4;
-  grid-row: 2 / 3;
-  border: 2px solid black;
-  margin-left: 22.5px;
 }
 
 div.grid-container2 > .coords-num {

@@ -5,16 +5,27 @@ import choosePlayerVs from "./dom-pvs.js";
 
 class Dom {
   static init() {
-    this.player1Turn = true;
-    this.player2Turn = false;
+    this.getPlayerTurns();
+    this.getShipsCount();
     this.game = driveGame();
     choosePlayerVs.playerVsComputer = true;
     this.getPlayers();
     this.grids = this.getGrids();
     createCells(this.player1.gameBoard, this.player2.gameBoard, this.grids.grid1, this.grids.grid2);
     this.cacheDom();
-    this.changePlayerName();
     this.bindEvents();
+  }
+
+  static getShipsCount() {
+    this.numberOf4Ships = 1;
+    this.numberOf3Ships = 2;
+    this.numberOf2Ships = 3;
+    this.numberOf1Ships = 4;
+  }
+
+  static getPlayerTurns() {
+    this.player1Turn = true;
+    this.player2Turn = false;
   }
 
   static getGrids() {
@@ -33,13 +44,70 @@ class Dom {
       this.player2Cells = document.querySelectorAll("#computer-grid > .cell");
     }
     this.gameStage = document.getElementById("game-stage");
-    this.playerName = document.getElementById("player-name");
+
+    this.ship4 = document.getElementById("ship-4");
+    this.ship3 = document.getElementById("ship-3");
+    this.ship2 = document.getElementById("ship-2");
+    this.ship1 = document.getElementById("ship-1");
+
+    this.ship4Count = document.getElementById("ship-4-count");
+    this.ship3Count = document.getElementById("ship-3-count");
+    this.ship2Count = document.getElementById("ship-2-count");
+    this.ship1Count = document.getElementById("ship-1-count");
   }
 
   static bindEvents() {
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
+    this.ship4.addEventListener("dragstart", this.takeShip4.bind(this));
+    this.ship4.addEventListener("dragend", (ev) => {
+      const element = ev.target;
+      element.classList.remove("dragging");
+    });
+    this.ship3.addEventListener("dragstart", this.takeShip3.bind(this));
+    this.ship3.addEventListener("dragend", (ev) => {
+      const element = ev.target;
+      element.classList.remove("dragging");
+    });
+    this.ship2.addEventListener("dragstart", this.takeShip2.bind(this));
+    this.ship2.addEventListener("dragend", (ev) => {
+      const element = ev.target;
+      element.classList.remove("dragging");
+    });
+    this.ship1.addEventListener("dragstart", this.takeShip1.bind(this));
+    this.ship1.addEventListener("dragend", (ev) => {
+      const element = ev.target;
+      element.classList.remove("dragging");
+    });
+  }
+
+  static takeShip4(ev) {
+    const element = ev.target;
+    this.numberOf4Ships = 0;
+    this.ship4Count.textContent = `${this.numberOf4Ships}x`;
+    element.classList.add("dragging");
+  }
+
+  static takeShip3(ev) {
+    const element = ev.target;
+    this.numberOf3Ships -= 1;
+    this.ship3Count.textContent = `${this.numberOf3Ships}x`;
+    element.classList.add("dragging");
+  }
+
+  static takeShip2(ev) {
+    const element = ev.target;
+    this.numberOf2Ships -= 1;
+    this.ship2Count.textContent = `${this.numberOf2Ships}x`;
+    element.classList.add("dragging");
+  }
+
+  static takeShip1(ev) {
+    const element = ev.target;
+    this.numberOf1Ships -= 1;
+    this.ship1Count.textContent = `${this.numberOf1Ships}x`;
+    element.classList.add("dragging");
   }
 
   static changeGameStage(text) {
@@ -56,10 +124,6 @@ class Dom {
     } else if (this.player2Turn) {
       this.gameStage.textContent = text;
     }
-  }
-
-  static changePlayerName() {
-    this.playerName.textContent = this.player1.name;
   }
 
   static getPlayers() {

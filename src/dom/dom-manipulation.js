@@ -1,14 +1,16 @@
 import driveGame from "../drive-game.js";
 import renderCells from "./render-cells.js";
 import createCells from "./create-cells.js";
+import Gameboard from "../factories/gameboard.js";
 import choosePlayerVs from "./dom-pvs.js";
 
-class Dom {
+// TODO: implement a method to drag ships to place them and revise what you did in rendercells and this file
+
+class DomPvC {
   static init() {
     this.getPlayerTurns();
     this.getShipsCount();
     this.game = driveGame();
-    choosePlayerVs.playerVsComputer = true;
     this.getPlayers();
     this.grids = this.getGrids();
     createCells(this.player1.gameBoard, this.player2.gameBoard, this.grids.grid1, this.grids.grid2);
@@ -30,19 +32,19 @@ class Dom {
 
   static getGrids() {
     const grid1 = document.querySelector("#player-grid");
-    let grid2 = document.querySelector("#player2-grid");
-    if (choosePlayerVs.playerVsComputer) {
-      grid2 = document.querySelector("#computer-grid");
-    }
+    const grid2 = document.querySelector("#computer-grid");
+
     return { grid1, grid2 };
   }
 
   static cacheDom() {
+    this.randomizeButton = document.getElementById("p-vs-c-randomize");
+    this.startButton = document.getElementById("p-vs-c-start");
+    this.restartButton = document.getElementById("restart-game-p-vs-c");
+
     this.player1Cells = document.querySelectorAll("#player-grid > .cell");
-    this.player2Cells = document.querySelectorAll("#player2-grid > .cell");
-    if (choosePlayerVs.playerVsComputer) {
-      this.player2Cells = document.querySelectorAll("#computer-grid > .cell");
-    }
+    this.player2Cells = document.querySelectorAll("#computer-grid > .cell");
+
     this.gameStage = document.getElementById("game-stage");
 
     this.ship4 = document.getElementById("ship-4");
@@ -57,9 +59,14 @@ class Dom {
   }
 
   static bindEvents() {
+    this.restartButton.addEventListener("click", this.restartGame.bind(this));
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
+    this.player1Cells.forEach((cell) => {
+      cell.addEventListener("dragover", this.appendShip.bind(this));
+    });
+
     this.ship4.addEventListener("dragstart", this.takeShip4.bind(this));
     this.ship4.addEventListener("dragend", (ev) => {
       const element = ev.target;
@@ -80,6 +87,10 @@ class Dom {
       const element = ev.target;
       element.classList.remove("dragging");
     });
+  }
+
+  static appendShip(ev) {
+    console.log(ev.target);
   }
 
   static takeShip4(ev) {
@@ -119,11 +130,16 @@ class Dom {
       }
       return;
     }
-    if (this.player1Turn) {
-      this.gameStage.textContent = text;
-    } else if (this.player2Turn) {
-      this.gameStage.textContent = text;
-    }
+    this.gameStage.textContent = text;
+  }
+
+  static restartGame() {
+    this.player1.gameBoard = new Gameboard();
+    this.player2.gameBoard = new Gameboard();
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    this.player2.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "horizontal");
+    this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 1, 1, "horizontal");
+    this.changeGameStage("Place your ships!");
   }
 
   static getPlayers() {
@@ -143,7 +159,7 @@ class Dom {
     // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship4Length1);
 
     // seperator
-    this.player1.gameBoard.placeShipRandom(this.game.getShips().shipLength4);
+    this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 1, 1, "horizontal");
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
@@ -158,6 +174,7 @@ class Dom {
   static attackOpponent(ev) {
     if (!this.isGameOver() && this.player1Turn) {
       const cell = ev.target;
+      console.log(cell.isAdjacent, cell.isHit);
       if (!cell.isHit && !cell.isAdjacent) {
         const shipHit = this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
@@ -205,6 +222,4 @@ class Dom {
     return false;
   }
 }
-Dom.init();
-
-export default Dom;
+DomPvC.init();

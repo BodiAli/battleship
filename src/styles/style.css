@@ -467,6 +467,10 @@ div.grid {
   font-weight: bold;
 }
 
+.dragging {
+  opacity: 0.5;
+}
+
 .hidden {
   opacity: 0;
 }

@@ -174,7 +174,6 @@ class DomPvC {
   static attackOpponent(ev) {
     if (!this.isGameOver() && this.player1Turn) {
       const cell = ev.target;
-      console.log(cell.isAdjacent, cell.isHit);
       if (!cell.isHit && !cell.isAdjacent) {
         const shipHit = this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);

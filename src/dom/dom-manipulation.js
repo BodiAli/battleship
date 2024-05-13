@@ -13,6 +13,7 @@ class Dom {
     this.grids = this.getGrids();
     createCells(this.player1.gameBoard, this.player2.gameBoard, this.grids.grid1, this.grids.grid2);
     this.cacheDom();
+    this.changePlayerName();
     this.bindEvents();
   }
 
@@ -26,12 +27,13 @@ class Dom {
   }
 
   static cacheDom() {
-    this.gameStage = document.getElementById("game-stage");
     this.player1Cells = document.querySelectorAll("#player-grid > .cell");
     this.player2Cells = document.querySelectorAll("#player2-grid > .cell");
     if (choosePlayerVs.playerVsComputer) {
       this.player2Cells = document.querySelectorAll("#computer-grid > .cell");
     }
+    this.gameStage = document.getElementById("game-stage");
+    this.playerName = document.getElementById("player-name");
   }
 
   static bindEvents() {
@@ -54,6 +56,10 @@ class Dom {
     } else if (this.player2Turn) {
       this.gameStage.textContent = text;
     }
+  }
+
+  static changePlayerName() {
+    this.playerName.textContent = this.player1.name;
   }
 
   static getPlayers() {

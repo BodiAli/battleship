@@ -17,10 +17,15 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
         targetCell.classList.add("adjacent");
       }
       targetCell.isAdjacent = true;
+    } else {
+      const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
+      targetCell.className = "cell";
+      targetCell.isAdjacent = false;
+      targetCell.isHit = false;
     }
   });
 
-  // render missed attacks
+  // Render missed attacks
   gameBoardObj1.missedCoordinates.forEach((coord) => {
     const arr = Array.from(domCells1);
     const targetCell = arr.find((domCell) => domCell.coord.x === coord.x && domCell.coord.y === coord.y);
@@ -46,10 +51,15 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
         targetCell.classList.add("adjacent");
       }
       targetCell.isAdjacent = true;
+    } else {
+      const targetCell = arr.find((domCell) => domCell.coord.x === cell.x && domCell.coord.y === cell.y);
+      targetCell.className = "cell";
+      targetCell.isAdjacent = false;
+      targetCell.isHit = false;
     }
   });
 
-  // render missed attacks
+  // Render missed attacks
   gameBoardObj2.missedCoordinates.forEach((coord) => {
     const arr = Array.from(domCells2);
     const targetCell = arr.find((domCell) => domCell.coord.x === coord.x && domCell.coord.y === coord.y);

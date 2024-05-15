@@ -4,7 +4,7 @@ import createCells from "./create-cells.js";
 import Gameboard from "../factories/gameboard.js";
 import choosePlayerVs from "./dom-pvs.js";
 
-// TODO: implement a method to drag ships to place them and revise what you did in rendercells and this file
+// TODO: make dragImage vertical if vertical is true
 
 class DomPvC {
   static init() {
@@ -64,7 +64,8 @@ class DomPvC {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
     this.player1Cells.forEach((cell) => {
-      cell.addEventListener("dragover", this.appendShip.bind(this));
+      cell.addEventListener("dragover", this.displayShipOnBoard.bind(this));
+      cell.addEventListener("drop", this.appendShip.bind(this));
     });
 
     this.ship4.addEventListener("dragstart", this.takeShip4.bind(this));
@@ -72,16 +73,19 @@ class DomPvC {
       const element = ev.target;
       element.classList.remove("dragging");
     });
+
     this.ship3.addEventListener("dragstart", this.takeShip3.bind(this));
     this.ship3.addEventListener("dragend", (ev) => {
       const element = ev.target;
       element.classList.remove("dragging");
     });
+
     this.ship2.addEventListener("dragstart", this.takeShip2.bind(this));
     this.ship2.addEventListener("dragend", (ev) => {
       const element = ev.target;
       element.classList.remove("dragging");
     });
+
     this.ship1.addEventListener("dragstart", this.takeShip1.bind(this));
     this.ship1.addEventListener("dragend", (ev) => {
       const element = ev.target;
@@ -90,7 +94,11 @@ class DomPvC {
   }
 
   static appendShip(ev) {
-    console.log(ev.target);
+    console.log(ev.dataTransfer.getData("text/plain"));
+  }
+
+  static displayShipOnBoard(ev) {
+    ev.preventDefault();
   }
 
   static takeShip4(ev) {
@@ -98,6 +106,10 @@ class DomPvC {
     this.numberOf4Ships = 0;
     this.ship4Count.textContent = `${this.numberOf4Ships}x`;
     element.classList.add("dragging");
+    ev.dataTransfer.setDragImage(element, 20, 20);
+    ev.dataTransfer.setData("text/plain", element.id);
+    // eslint-disable-next-line no-param-reassign
+    ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip3(ev) {
@@ -105,6 +117,10 @@ class DomPvC {
     this.numberOf3Ships -= 1;
     this.ship3Count.textContent = `${this.numberOf3Ships}x`;
     element.classList.add("dragging");
+    ev.dataTransfer.setDragImage(element, 20, 20);
+    ev.dataTransfer.setData("text/plain", element.id);
+    // eslint-disable-next-line no-param-reassign
+    ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip2(ev) {
@@ -112,6 +128,10 @@ class DomPvC {
     this.numberOf2Ships -= 1;
     this.ship2Count.textContent = `${this.numberOf2Ships}x`;
     element.classList.add("dragging");
+    ev.dataTransfer.setDragImage(element, 20, 20);
+    ev.dataTransfer.setData("text/plain", element.id);
+    // eslint-disable-next-line no-param-reassign
+    ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip1(ev) {
@@ -119,6 +139,9 @@ class DomPvC {
     this.numberOf1Ships -= 1;
     this.ship1Count.textContent = `${this.numberOf1Ships}x`;
     element.classList.add("dragging");
+    ev.dataTransfer.setData("text/plain", element.id);
+    // eslint-disable-next-line no-param-reassign
+    ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static changeGameStage(text) {

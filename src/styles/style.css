@@ -10,6 +10,7 @@
 :root {
   --main-bg: #94b9b8a3;
   --main-font-color: #574142;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -304,26 +305,27 @@ div.grid-container1 > .player-pieces {
   flex-direction: column;
   align-items: center;
   gap: 5px;
+  position: relative;
 }
 .player-pieces > .ship-container > div {
   height: 2.4rem;
   display: flex;
+  width: fit-content;
+  justify-content: center;
 }
 .player-pieces > .ship-container > div > div {
   background-color: #58817f;
   border: 2px solid #27504e;
+  height: 100%;
+  width: 2.45rem;
 }
 .ship-container > p {
   text-align: center;
 }
-.ship-container > div {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.ship-container > div > div {
-  height: 100%;
-  width: 24%;
+.ship-container > .label {
+  position: absolute;
+  left: 2px;
+  font-size: 0.9rem;
 }
 
 div.grid-container1 > .coords-num {

@@ -247,6 +247,16 @@ describe("Gameboard tests:", () => {
     });
   });
 
+  test("removeShip should remove the given ship from the board", () => {
+    const ship = new Ship(4);
+    gameBoard.placeShip(ship, 3, 3, "horizontal");
+    gameBoard.removeShip(ship);
+    expect(gameBoard.coordinates[22]).toEqual({ x: 3, y: 3, ship: null, isHit: false });
+    expect(gameBoard.coordinates[23]).toEqual({ x: 4, y: 3, ship: null, isHit: false });
+    expect(gameBoard.coordinates[24]).toEqual({ x: 5, y: 3, ship: null, isHit: false });
+    expect(gameBoard.coordinates[25]).toEqual({ x: 6, y: 3, ship: null, isHit: false });
+  });
+
   test("should return true if all ships sunk false otherwise", () => {
     const ship1 = new Ship(2);
     const ship2 = new Ship(3);

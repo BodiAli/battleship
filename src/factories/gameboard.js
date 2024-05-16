@@ -236,7 +236,7 @@ class Gameboard {
   }
 
   isAllSunk() {
-    return this.ships.every((ship) => ship.hitCount >= ship.length);
+    return this.ships.every((ship) => ship.isSunk());
   }
 
   triggerAdjacentCoordinates(xCoord, yCoord) {

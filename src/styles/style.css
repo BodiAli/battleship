@@ -322,11 +322,6 @@ div.grid-container1 > .player-pieces {
 .ship-container > p {
   text-align: center;
 }
-.ship-container > .label {
-  position: absolute;
-  left: 2px;
-  font-size: 0.9rem;
-}
 
 div.grid-container1 > .coords-num {
   grid-column: 2 / 3;

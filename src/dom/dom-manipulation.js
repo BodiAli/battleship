@@ -285,51 +285,26 @@ class DomPvC {
     }
   }
 
-  static canChangeDirection(shipLength, xCoord, yCoord, direction) {
-    if (
-      (direction === "horizontal" && xCoord + shipLength - 1 > 10) ||
-      (direction === "vertical" && yCoord + shipLength - 1 > 10)
-    ) {
-      return false;
-    }
-    for (let i = 0; i < shipLength; i++) {
-      const x = direction === "horizontal" ? xCoord + i : xCoord;
-      const y = direction === "vertical" ? yCoord + i : yCoord;
-      if (
-        this.player1.gameBoard.isCoordOccupied(x, y) ||
-        this.player1.gameBoard.isCoordOccupied(x - 1, y) ||
-        this.player1.gameBoard.isCoordOccupied(x + 1, y) ||
-        this.player1.gameBoard.isCoordOccupied(x, y - 1) ||
-        this.player1.gameBoard.isCoordOccupied(x, y + 1) ||
-        this.player1.gameBoard.isCoordOccupied(x + 1, y + 1) ||
-        this.player1.gameBoard.isCoordOccupied(x - 1, y - 1) ||
-        this.player1.gameBoard.isCoordOccupied(x + 1, y - 1) ||
-        this.player1.gameBoard.isCoordOccupied(x - 1, y + 1)
-      ) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   static changeDirection(ev) {
     const cell = ev.target;
     if (cell.ship) {
       const head = this.player1.gameBoard.getShipHead(cell.ship);
       this.player1.gameBoard.removeShip(cell.ship);
-      if (!cell.ship.isVertical && this.canChangeDirection(cell.ship.length, head.x, head.y, "vertical")) {
+      if (
+        !cell.ship.isVertical &&
+        this.player1.gameBoard.canPlaceShip(cell.ship.length, head.x, head.y, "vertical")
+      ) {
         this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "vertical");
         cell.ship.isVertical = true;
       } else if (
         cell.ship.isVertical &&
-        this.canChangeDirection(cell.ship.length, head.x, head.y, "horizontal")
+        this.player1.gameBoard.canPlaceShip(cell.ship.length, head.x, head.y, "horizontal")
       ) {
         this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "horizontal");
         cell.ship.isVertical = false;
-      } else if (this.canChangeDirection(cell.ship.length, head.x, head.y, "horizontal")) {
+      } else if (this.player1.gameBoard.canPlaceShip(cell.ship.length, head.x, head.y, "horizontal")) {
         this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "horizontal");
-      } else if (this.canChangeDirection(cell.ship.length, head.x, head.y, "vertical")) {
+      } else if (this.player1.gameBoard.canPlaceShip(cell.ship.length, head.x, head.y, "vertical")) {
         this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "vertical");
       }
       renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);

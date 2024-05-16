@@ -1,3 +1,5 @@
+import Ship from "./ship.js";
+
 class Gameboard {
   constructor() {
     this.ships = [];
@@ -18,7 +20,7 @@ class Gameboard {
   placeShip(shipObject, xCoord, yCoord, direction) {
     if (xCoord > 10 || xCoord <= 0 || yCoord > 10 || yCoord <= 0) {
       console.log("Invalid ship placement: Ship should be placed at coordinates between 1 to 10");
-      return;
+      return false;
     }
     const shipLength = shipObject.length;
     const shipPositions = [];
@@ -33,7 +35,7 @@ class Gameboard {
 
     if (!isValidPlacement) {
       console.log("Invalid ship placement: Ship cannot be placed at the specified coordinates or direction");
-      return;
+      return false;
     }
 
     for (let i = 0; i < shipLength; i++) {
@@ -51,7 +53,7 @@ class Gameboard {
         this.isCoordOccupied(x - 1, y + 1)
       ) {
         console.log("Invalid ship placement: Adjacent coordinates already have ships.");
-        return;
+        return false;
       }
       shipPositions.push({ x, y });
     }
@@ -60,6 +62,7 @@ class Gameboard {
       coordinate.ship = shipObject;
     });
     this.ships.push(shipObject);
+    return true;
   }
 
   placeShipRandom(shipObject) {
@@ -297,6 +300,14 @@ class Gameboard {
     });
   }
 
+  getShipHead(shipObject) {
+    const head = this.coordinates.find((coordinate) => {
+      const { ship } = coordinate;
+      return ship === shipObject;
+    });
+    return { x: head.x, y: head.y };
+  }
+
   removeShip(shipObject) {
     this.coordinates.forEach((coord) => {
       const { ship } = coord;
@@ -305,6 +316,11 @@ class Gameboard {
         coord.ship = null;
       }
     });
+    const index = this.ships.indexOf(shipObject);
+    if (index !== -1) {
+      this.ships.splice(index, 1);
+    }
   }
 }
+
 export default Gameboard;

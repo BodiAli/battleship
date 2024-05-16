@@ -296,6 +296,15 @@ class Gameboard {
       }
     });
   }
-}
 
+  removeShip(shipObject) {
+    this.coordinates.forEach((coord) => {
+      const { ship } = coord;
+      if (ship === shipObject) {
+        // eslint-disable-next-line no-param-reassign
+        coord.ship = null;
+      }
+    });
+  }
+}
 export default Gameboard;

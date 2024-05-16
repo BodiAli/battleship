@@ -7,6 +7,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
       const targetCell = arr.find(
         (domCell) => domCell.coord.x === coordinate.x && domCell.coord.y === coordinate.y
       );
+      targetCell.ship = coordinate.ship;
       targetCell.classList.add("cell-busy");
     } else if (coordinate.ship !== null && coordinate.isHit === true) {
       const targetCell = arr.find(
@@ -30,6 +31,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
       targetCell.className = "cell";
       targetCell.isAdjacent = false;
       targetCell.isHit = false;
+      targetCell.ship = null;
     }
   });
 
@@ -48,6 +50,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
         const targetCell = arr.find(
           (domCell) => domCell.coord.x === coordinate.x && domCell.coord.y === coordinate.y
         );
+        targetCell.ship = coordinate.ship;
         targetCell.classList.add("cell-busy");
       }
     } else if (coordinate.ship !== null && coordinate.isHit === true) {
@@ -72,6 +75,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
       targetCell.className = "cell";
       targetCell.isAdjacent = false;
       targetCell.isHit = false;
+      targetCell.ship = null;
     }
   });
 

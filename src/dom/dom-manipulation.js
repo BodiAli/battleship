@@ -4,8 +4,6 @@ import createCells from "./create-cells.js";
 import Gameboard from "../factories/gameboard.js";
 import choosePlayerVs from "./dom-pvs.js";
 
-// TODO: make dragImage vertical if vertical is true
-
 class DomPvC {
   static init() {
     this.getPlayerTurns();
@@ -53,7 +51,7 @@ class DomPvC {
     this.ship2 = document.getElementById("ship-2");
     this.ship1 = document.getElementById("ship-1");
 
-    this.ship4Count = document.getElementById("ship-4-count");
+    this.shipLength4Count = document.getElementById("ship-4-count");
     this.shipLength3Count = document.getElementById("ship-3-count");
     this.shipLength2Count = document.getElementById("ship-2-count");
     this.shipLength1Count = document.getElementById("ship-1-count");
@@ -61,41 +59,175 @@ class DomPvC {
 
   static bindEvents() {
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
+
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
     this.player1Cells.forEach((cell) => {
       cell.addEventListener("dragover", this.displayShipOnBoard.bind(this));
       cell.addEventListener("drop", this.appendShip.bind(this));
+      cell.addEventListener("click", this.changeDirection.bind(this));
     });
 
     this.ship4.addEventListener("dragstart", this.takeShip4.bind(this));
     this.ship4.addEventListener("dragend", (ev) => {
       const element = ev.target;
+      if (!this.shipLength4Placed) {
+        this.numberOfShipsLength4 += 1;
+        this.shipLength4Count.textContent = `${this.numberOfShipsLength4}x`;
+      }
       element.classList.remove("dragging");
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     });
 
     this.ship3.addEventListener("dragstart", this.takeShip3.bind(this));
     this.ship3.addEventListener("dragend", (ev) => {
       const element = ev.target;
+      if (!this.shipLength3Placed) {
+        this.numberOfShipsLength3 += 1;
+        this.shipLength3Count.textContent = `${this.numberOfShipsLength3}x`;
+      }
       element.classList.remove("dragging");
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     });
 
     this.ship2.addEventListener("dragstart", this.takeShip2.bind(this));
     this.ship2.addEventListener("dragend", (ev) => {
       const element = ev.target;
+      if (!this.shipLength2Placed) {
+        this.numberOfShipsLength2 += 1;
+        this.shipLength2Count.textContent = `${this.numberOfShipsLength2}x`;
+      }
       element.classList.remove("dragging");
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     });
 
     this.ship1.addEventListener("dragstart", this.takeShip1.bind(this));
     this.ship1.addEventListener("dragend", (ev) => {
       const element = ev.target;
+      if (!this.shipLength1Placed) {
+        this.numberOfShipsLength1 += 1;
+        this.shipLength1Count.textContent = `${this.numberOfShipsLength1}x`;
+      }
       element.classList.remove("dragging");
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     });
   }
 
   static appendShip(ev) {
-    console.log(ev.dataTransfer.getData("text/plain"));
+    const cell = ev.target;
+    const element = document.querySelector(".dragging");
+    this.clickToChangeDirectionCell = cell;
+    if (element && element.id.includes("ship-4")) {
+      if (this.numberOfShipsLength4 === 0) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.shipLength4,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength4Placed = true;
+        }
+      }
+    } else if (element && element.id.includes("ship-3")) {
+      if (this.numberOfShipsLength3 === 1) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship1Length3,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength3Placed = true;
+        }
+      } else if (this.numberOfShipsLength3 === 0) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship2Length3,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength3Placed = true;
+        }
+      }
+    } else if (element && element.id.includes("ship-2")) {
+      if (this.numberOfShipsLength2 === 2) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship1Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength2Placed = true;
+        }
+      } else if (this.numberOfShipsLength2 === 1) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship2Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength2Placed = true;
+        }
+      } else if (this.numberOfShipsLength2 === 0) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship3Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength2Placed = true;
+        }
+      }
+    } else if (element && element.id.includes("ship-1")) {
+      if (this.numberOfShipsLength1 === 3) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship1Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength1Placed = true;
+        }
+      } else if (this.numberOfShipsLength1 === 2) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship2Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength1Placed = true;
+        }
+      } else if (this.numberOfShipsLength1 === 1) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship3Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength1Placed = true;
+        }
+      } else if (this.numberOfShipsLength1 === 0) {
+        const isPlaced = this.player1.gameBoard.placeShip(
+          this.ships.ship4Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
+        if (isPlaced) {
+          this.shipLength1Placed = true;
+        }
+      }
+    }
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
   }
 
   static displayShipOnBoard(ev) {
@@ -104,99 +236,160 @@ class DomPvC {
     const element = document.querySelector(".dragging");
     if (element && element.id.includes("ship-4")) {
       if (this.numberOfShipsLength4 === 0) {
-        this.player1.gameBoard.removeShip(this.ships.shipLength4);
         this.player1.gameBoard.placeShip(this.ships.shipLength4, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.shipLength4);
       }
-      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     } else if (element && element.id.includes("ship-3")) {
       if (this.numberOfShipsLength3 === 1) {
-        this.player1.gameBoard.removeShip(this.ships.ship1Length3);
         this.player1.gameBoard.placeShip(this.ships.ship1Length3, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship1Length3);
       } else if (this.numberOfShipsLength3 === 0) {
-        this.player1.gameBoard.removeShip(this.ships.ship2Length3);
         this.player1.gameBoard.placeShip(this.ships.ship2Length3, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship2Length3);
       }
-      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     } else if (element && element.id.includes("ship-2")) {
       if (this.numberOfShipsLength2 === 2) {
-        this.player1.gameBoard.removeShip(this.ships.ship1Length2);
         this.player1.gameBoard.placeShip(this.ships.ship1Length2, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship1Length2);
       } else if (this.numberOfShipsLength2 === 1) {
-        this.player1.gameBoard.removeShip(this.ships.ship2Length2);
         this.player1.gameBoard.placeShip(this.ships.ship2Length2, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship2Length2);
       } else if (this.numberOfShipsLength2 === 0) {
-        this.player1.gameBoard.removeShip(this.ships.ship3Length2);
         this.player1.gameBoard.placeShip(this.ships.ship3Length2, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship3Length2);
       }
-      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     } else if (element && element.id.includes("ship-1")) {
       if (this.numberOfShipsLength1 === 3) {
-        this.player1.gameBoard.removeShip(this.ships.ship1Length1);
         this.player1.gameBoard.placeShip(this.ships.ship1Length1, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship1Length1);
       } else if (this.numberOfShipsLength1 === 2) {
-        this.player1.gameBoard.removeShip(this.ships.ship2Length1);
         this.player1.gameBoard.placeShip(this.ships.ship2Length1, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship2Length1);
       } else if (this.numberOfShipsLength1 === 1) {
-        this.player1.gameBoard.removeShip(this.ships.ship3Length1);
         this.player1.gameBoard.placeShip(this.ships.ship3Length1, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship3Length1);
       } else if (this.numberOfShipsLength1 === 0) {
-        this.player1.gameBoard.removeShip(this.ships.ship4Length1);
         this.player1.gameBoard.placeShip(this.ships.ship4Length1, cell.coord.x, cell.coord.y, "horizontal");
+        renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+        this.player1.gameBoard.removeShip(this.ships.ship4Length1);
+      }
+    }
+  }
+
+  static canChangeDirection(shipLength, xCoord, yCoord, direction) {
+    if (
+      (direction === "horizontal" && xCoord + shipLength - 1 > 10) ||
+      (direction === "vertical" && yCoord + shipLength - 1 > 10)
+    ) {
+      return false;
+    }
+    for (let i = 0; i < shipLength; i++) {
+      const x = direction === "horizontal" ? xCoord + i : xCoord;
+      const y = direction === "vertical" ? yCoord + i : yCoord;
+      if (
+        this.player1.gameBoard.isCoordOccupied(x, y) ||
+        this.player1.gameBoard.isCoordOccupied(x - 1, y) ||
+        this.player1.gameBoard.isCoordOccupied(x + 1, y) ||
+        this.player1.gameBoard.isCoordOccupied(x, y - 1) ||
+        this.player1.gameBoard.isCoordOccupied(x, y + 1) ||
+        this.player1.gameBoard.isCoordOccupied(x + 1, y + 1) ||
+        this.player1.gameBoard.isCoordOccupied(x - 1, y - 1) ||
+        this.player1.gameBoard.isCoordOccupied(x + 1, y - 1) ||
+        this.player1.gameBoard.isCoordOccupied(x - 1, y + 1)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  static changeDirection(ev) {
+    const cell = ev.target;
+    if (cell.ship) {
+      const head = this.player1.gameBoard.getShipHead(cell.ship);
+      this.player1.gameBoard.removeShip(cell.ship);
+      if (!cell.ship.isVertical && this.canChangeDirection(cell.ship.length, head.x, head.y, "vertical")) {
+        this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "vertical");
+        cell.ship.isVertical = true;
+      } else if (
+        cell.ship.isVertical &&
+        this.canChangeDirection(cell.ship.length, head.x, head.y, "horizontal")
+      ) {
+        this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "horizontal");
+        cell.ship.isVertical = false;
+      } else if (this.canChangeDirection(cell.ship.length, head.x, head.y, "horizontal")) {
+        this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "horizontal");
+      } else if (this.canChangeDirection(cell.ship.length, head.x, head.y, "vertical")) {
+        this.player1.gameBoard.placeShip(cell.ship, head.x, head.y, "vertical");
       }
       renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     }
   }
 
   static takeShip4(ev) {
+    this.shipLength4Placed = false;
     const element = ev.target;
+    const { dataTransfer } = ev;
     if (this.numberOfShipsLength4 > -1) {
       const number = Math.max(0, (this.numberOfShipsLength4 -= 1));
-      this.ship4Count.textContent = `${number}x`;
+      this.shipLength4Count.textContent = `${number}x`;
     }
     element.classList.add("dragging");
-    ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", 4);
-    // eslint-disable-next-line no-param-reassign
-    ev.dataTransfer.effectAllowed = "copyMove";
+    dataTransfer.setDragImage(element, 20, 20);
+    dataTransfer.setData("text/plain", 4);
+    dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip3(ev) {
+    this.shipLength3Placed = false;
     const element = ev.target;
+    const { dataTransfer } = ev;
     if (this.numberOfShipsLength3 > -1) {
       const number = Math.max(0, (this.numberOfShipsLength3 -= 1));
       this.shipLength3Count.textContent = `${number}x`;
     }
     element.classList.add("dragging");
-    ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", 3);
-    // eslint-disable-next-line no-param-reassign
-    ev.dataTransfer.effectAllowed = "copyMove";
+    dataTransfer.setDragImage(element, 20, 20);
+    dataTransfer.setData("text/plain", 3);
+    dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip2(ev) {
+    this.shipLength2Placed = false;
     const element = ev.target;
+    const { dataTransfer } = ev;
     if (this.numberOfShipsLength2 > -1) {
       const number = Math.max(0, (this.numberOfShipsLength2 -= 1));
       this.shipLength2Count.textContent = `${number}x`;
     }
     element.classList.add("dragging");
-    ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", 2);
-    // eslint-disable-next-line no-param-reassign
-    ev.dataTransfer.effectAllowed = "copyMove";
+    dataTransfer.setDragImage(element, 20, 20);
+    dataTransfer.setData("text/plain", 2);
+    dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip1(ev) {
+    this.shipLength1Placed = false;
     const element = ev.target;
+    const { dataTransfer } = ev;
     if (this.numberOfShipsLength1 > -1) {
       const number = Math.max(0, (this.numberOfShipsLength1 -= 1));
       this.shipLength1Count.textContent = `${number}x`;
     }
-
     element.classList.add("dragging");
-    ev.dataTransfer.setData("text/plain", 1);
-    // eslint-disable-next-line no-param-reassign
-    ev.dataTransfer.effectAllowed = "copyMove";
+    dataTransfer.setDragImage(element, 20, 20);
+    dataTransfer.setData("text/plain", 1);
+    dataTransfer.effectAllowed = "copyMove";
   }
 
   static changeGameStage(text) {
@@ -233,6 +426,11 @@ class DomPvC {
       ship3Length1: this.game.getShips().ship3Length1,
       ship4Length1: this.game.getShips().ship4Length1,
     };
+    this.isVertical = false;
+  }
+
+  static shipsPlaced() {
+    return this.player1.gameBoard.ships.length === 10;
   }
 
   static getPlayers() {
@@ -240,32 +438,20 @@ class DomPvC {
     this.player1 = players.player1;
     this.player2 = players.player2;
 
-    this.player2.gameBoard.placeShip(this.ships.shipLength4, 3, 3, "horizontal");
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length2);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship3Length2);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length1);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length1);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship3Length1);
-    // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship4Length1);
-
-    // seperator
-    this.player1.gameBoard.placeShip(this.ships.shipLength4, 1, 1, "horizontal");
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship2Length2);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship3Length2);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length1);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship2Length1);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship3Length1);
-    // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship4Length1);
+    this.player2.gameBoard.placeShipRandom(this.ships.shipLength4);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length3);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length3);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length2);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length2);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship3Length2);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length1);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length1);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship3Length1);
+    this.player2.gameBoard.placeShipRandom(this.ships.ship4Length1);
   }
 
   static attackOpponent(ev) {
-    if (!this.isGameOver() && this.player1Turn) {
+    if (this.shipsPlaced() && !this.isGameOver() && this.player1Turn) {
       const cell = ev.target;
       if (!cell.isHit && !cell.isAdjacent) {
         const shipHit = this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);

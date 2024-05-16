@@ -11,6 +11,7 @@ class DomPvC {
     this.getPlayerTurns();
     this.getShipsCount();
     this.game = driveGame();
+    this.getShips();
     this.getPlayers();
     this.grids = this.getGrids();
     createCells(this.player1.gameBoard, this.player2.gameBoard, this.grids.grid1, this.grids.grid2);
@@ -19,10 +20,10 @@ class DomPvC {
   }
 
   static getShipsCount() {
-    this.numberOf4Ships = 1;
-    this.numberOf3Ships = 2;
-    this.numberOf2Ships = 3;
-    this.numberOf1Ships = 4;
+    this.numberOfShipsLength4 = 1;
+    this.numberOfShipsLength3 = 2;
+    this.numberOfShipsLength2 = 3;
+    this.numberOfShipsLength1 = 4;
   }
 
   static getPlayerTurns() {
@@ -53,9 +54,9 @@ class DomPvC {
     this.ship1 = document.getElementById("ship-1");
 
     this.ship4Count = document.getElementById("ship-4-count");
-    this.ship3Count = document.getElementById("ship-3-count");
-    this.ship2Count = document.getElementById("ship-2-count");
-    this.ship1Count = document.getElementById("ship-1-count");
+    this.shipLength3Count = document.getElementById("ship-3-count");
+    this.shipLength2Count = document.getElementById("ship-2-count");
+    this.shipLength1Count = document.getElementById("ship-1-count");
   }
 
   static bindEvents() {
@@ -99,47 +100,101 @@ class DomPvC {
 
   static displayShipOnBoard(ev) {
     ev.preventDefault();
+    const cell = ev.target;
+    const element = document.querySelector(".dragging");
+    if (element && element.id.includes("ship-4")) {
+      if (this.numberOfShipsLength4 === 0) {
+        this.player1.gameBoard.removeShip(this.ships.shipLength4);
+        this.player1.gameBoard.placeShip(this.ships.shipLength4, cell.coord.x, cell.coord.y, "horizontal");
+      }
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    } else if (element && element.id.includes("ship-3")) {
+      if (this.numberOfShipsLength3 === 1) {
+        this.player1.gameBoard.removeShip(this.ships.ship1Length3);
+        this.player1.gameBoard.placeShip(this.ships.ship1Length3, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength3 === 0) {
+        this.player1.gameBoard.removeShip(this.ships.ship2Length3);
+        this.player1.gameBoard.placeShip(this.ships.ship2Length3, cell.coord.x, cell.coord.y, "horizontal");
+      }
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    } else if (element && element.id.includes("ship-2")) {
+      if (this.numberOfShipsLength2 === 2) {
+        this.player1.gameBoard.removeShip(this.ships.ship1Length2);
+        this.player1.gameBoard.placeShip(this.ships.ship1Length2, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength2 === 1) {
+        this.player1.gameBoard.removeShip(this.ships.ship2Length2);
+        this.player1.gameBoard.placeShip(this.ships.ship2Length2, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength2 === 0) {
+        this.player1.gameBoard.removeShip(this.ships.ship3Length2);
+        this.player1.gameBoard.placeShip(this.ships.ship3Length2, cell.coord.x, cell.coord.y, "horizontal");
+      }
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    } else if (element && element.id.includes("ship-1")) {
+      if (this.numberOfShipsLength1 === 3) {
+        this.player1.gameBoard.removeShip(this.ships.ship1Length1);
+        this.player1.gameBoard.placeShip(this.ships.ship1Length1, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength1 === 2) {
+        this.player1.gameBoard.removeShip(this.ships.ship2Length1);
+        this.player1.gameBoard.placeShip(this.ships.ship2Length1, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength1 === 1) {
+        this.player1.gameBoard.removeShip(this.ships.ship3Length1);
+        this.player1.gameBoard.placeShip(this.ships.ship3Length1, cell.coord.x, cell.coord.y, "horizontal");
+      } else if (this.numberOfShipsLength1 === 0) {
+        this.player1.gameBoard.removeShip(this.ships.ship4Length1);
+        this.player1.gameBoard.placeShip(this.ships.ship4Length1, cell.coord.x, cell.coord.y, "horizontal");
+      }
+      renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    }
   }
 
   static takeShip4(ev) {
     const element = ev.target;
-    this.numberOf4Ships = 0;
-    this.ship4Count.textContent = `${this.numberOf4Ships}x`;
+    if (this.numberOfShipsLength4 > -1) {
+      const number = Math.max(0, (this.numberOfShipsLength4 -= 1));
+      this.ship4Count.textContent = `${number}x`;
+    }
     element.classList.add("dragging");
     ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", element.id);
+    ev.dataTransfer.setData("text/plain", 4);
     // eslint-disable-next-line no-param-reassign
     ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip3(ev) {
     const element = ev.target;
-    this.numberOf3Ships -= 1;
-    this.ship3Count.textContent = `${this.numberOf3Ships}x`;
+    if (this.numberOfShipsLength3 > -1) {
+      const number = Math.max(0, (this.numberOfShipsLength3 -= 1));
+      this.shipLength3Count.textContent = `${number}x`;
+    }
     element.classList.add("dragging");
     ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", element.id);
+    ev.dataTransfer.setData("text/plain", 3);
     // eslint-disable-next-line no-param-reassign
     ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip2(ev) {
     const element = ev.target;
-    this.numberOf2Ships -= 1;
-    this.ship2Count.textContent = `${this.numberOf2Ships}x`;
+    if (this.numberOfShipsLength2 > -1) {
+      const number = Math.max(0, (this.numberOfShipsLength2 -= 1));
+      this.shipLength2Count.textContent = `${number}x`;
+    }
     element.classList.add("dragging");
     ev.dataTransfer.setDragImage(element, 20, 20);
-    ev.dataTransfer.setData("text/plain", element.id);
+    ev.dataTransfer.setData("text/plain", 2);
     // eslint-disable-next-line no-param-reassign
     ev.dataTransfer.effectAllowed = "copyMove";
   }
 
   static takeShip1(ev) {
     const element = ev.target;
-    this.numberOf1Ships -= 1;
-    this.ship1Count.textContent = `${this.numberOf1Ships}x`;
+    if (this.numberOfShipsLength1 > -1) {
+      const number = Math.max(0, (this.numberOfShipsLength1 -= 1));
+      this.shipLength1Count.textContent = `${number}x`;
+    }
+
     element.classList.add("dragging");
-    ev.dataTransfer.setData("text/plain", element.id);
+    ev.dataTransfer.setData("text/plain", 1);
     // eslint-disable-next-line no-param-reassign
     ev.dataTransfer.effectAllowed = "copyMove";
   }
@@ -160,9 +215,24 @@ class DomPvC {
     this.player1.gameBoard = new Gameboard();
     this.player2.gameBoard = new Gameboard();
     renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-    this.player2.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "horizontal");
-    this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 1, 1, "horizontal");
+    this.player2.gameBoard.placeShip(this.ships.shipLength4, 3, 3, "horizontal");
+    this.player1.gameBoard.placeShip(this.ships.shipLength4, 1, 1, "horizontal");
     this.changeGameStage("Place your ships!");
+  }
+
+  static getShips() {
+    this.ships = {
+      shipLength4: this.game.getShips().shipLength4,
+      ship1Length3: this.game.getShips().ship1Length3,
+      ship2Length3: this.game.getShips().ship2Length3,
+      ship1Length2: this.game.getShips().ship1Length2,
+      ship2Length2: this.game.getShips().ship2Length2,
+      ship3Length2: this.game.getShips().ship3Length2,
+      ship1Length1: this.game.getShips().ship1Length1,
+      ship2Length1: this.game.getShips().ship2Length1,
+      ship3Length1: this.game.getShips().ship3Length1,
+      ship4Length1: this.game.getShips().ship4Length1,
+    };
   }
 
   static getPlayers() {
@@ -170,7 +240,7 @@ class DomPvC {
     this.player1 = players.player1;
     this.player2 = players.player2;
 
-    this.player2.gameBoard.placeShip(this.game.getShips().shipLength4, 3, 3, "horizontal");
+    this.player2.gameBoard.placeShip(this.ships.shipLength4, 3, 3, "horizontal");
     // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
     // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
     // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);
@@ -182,7 +252,7 @@ class DomPvC {
     // this.player2.gameBoard.placeShipRandom(this.game.getShips().ship4Length1);
 
     // seperator
-    this.player1.gameBoard.placeShip(this.game.getShips().shipLength4, 1, 1, "horizontal");
+    this.player1.gameBoard.placeShip(this.ships.shipLength4, 1, 1, "horizontal");
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length3);
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship2Length3);
     // this.player1.gameBoard.placeShipRandom(this.game.getShips().ship1Length2);

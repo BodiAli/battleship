@@ -59,7 +59,7 @@ class DomPvC {
 
   static bindEvents() {
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
-
+    this.randomizeButton.addEventListener("click", this.randomShipPlacement.bind(this));
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
@@ -121,7 +121,7 @@ class DomPvC {
     if (element && element.id.includes("ship-4")) {
       if (this.numberOfShipsLength4 === 0) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.shipLength4,
+          this.player1Ships.p1ShipLength4,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -133,7 +133,7 @@ class DomPvC {
     } else if (element && element.id.includes("ship-3")) {
       if (this.numberOfShipsLength3 === 1) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship1Length3,
+          this.player1Ships.p1Ship1Length3,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -143,7 +143,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength3 === 0) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship2Length3,
+          this.player1Ships.p1Ship2Length3,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -155,7 +155,7 @@ class DomPvC {
     } else if (element && element.id.includes("ship-2")) {
       if (this.numberOfShipsLength2 === 2) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship1Length2,
+          this.player1Ships.p1Ship1Length2,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -165,7 +165,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength2 === 1) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship2Length2,
+          this.player1Ships.p1Ship2Length2,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -175,7 +175,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength2 === 0) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship3Length2,
+          this.player1Ships.p1Ship3Length2,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -187,7 +187,7 @@ class DomPvC {
     } else if (element && element.id.includes("ship-1")) {
       if (this.numberOfShipsLength1 === 3) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship1Length1,
+          this.player1Ships.p1Ship1Length1,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -197,7 +197,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength1 === 2) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship2Length1,
+          this.player1Ships.p1Ship2Length1,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -207,7 +207,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength1 === 1) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship3Length1,
+          this.player1Ships.p1Ship3Length1,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -217,7 +217,7 @@ class DomPvC {
         }
       } else if (this.numberOfShipsLength1 === 0) {
         const isPlaced = this.player1.gameBoard.placeShip(
-          this.ships.ship4Length1,
+          this.player1Ships.p1Ship4Length1,
           cell.coord.x,
           cell.coord.y,
           "horizontal"
@@ -236,51 +236,101 @@ class DomPvC {
     const element = document.querySelector(".dragging");
     if (element && element.id.includes("ship-4")) {
       if (this.numberOfShipsLength4 === 0) {
-        this.player1.gameBoard.placeShip(this.ships.shipLength4, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1ShipLength4,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.shipLength4);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1ShipLength4);
       }
     } else if (element && element.id.includes("ship-3")) {
       if (this.numberOfShipsLength3 === 1) {
-        this.player1.gameBoard.placeShip(this.ships.ship1Length3, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship1Length3,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship1Length3);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship1Length3);
       } else if (this.numberOfShipsLength3 === 0) {
-        this.player1.gameBoard.placeShip(this.ships.ship2Length3, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship2Length3,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship2Length3);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship2Length3);
       }
     } else if (element && element.id.includes("ship-2")) {
       if (this.numberOfShipsLength2 === 2) {
-        this.player1.gameBoard.placeShip(this.ships.ship1Length2, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship1Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship1Length2);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship1Length2);
       } else if (this.numberOfShipsLength2 === 1) {
-        this.player1.gameBoard.placeShip(this.ships.ship2Length2, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship2Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship2Length2);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship2Length2);
       } else if (this.numberOfShipsLength2 === 0) {
-        this.player1.gameBoard.placeShip(this.ships.ship3Length2, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship3Length2,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship3Length2);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship3Length2);
       }
     } else if (element && element.id.includes("ship-1")) {
       if (this.numberOfShipsLength1 === 3) {
-        this.player1.gameBoard.placeShip(this.ships.ship1Length1, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship1Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship1Length1);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship1Length1);
       } else if (this.numberOfShipsLength1 === 2) {
-        this.player1.gameBoard.placeShip(this.ships.ship2Length1, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship2Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship2Length1);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship2Length1);
       } else if (this.numberOfShipsLength1 === 1) {
-        this.player1.gameBoard.placeShip(this.ships.ship3Length1, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship3Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship3Length1);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship3Length1);
       } else if (this.numberOfShipsLength1 === 0) {
-        this.player1.gameBoard.placeShip(this.ships.ship4Length1, cell.coord.x, cell.coord.y, "horizontal");
+        this.player1.gameBoard.placeShip(
+          this.player1Ships.p1Ship4Length1,
+          cell.coord.x,
+          cell.coord.y,
+          "horizontal"
+        );
         renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-        this.player1.gameBoard.removeShip(this.ships.ship4Length1);
+        this.player1.gameBoard.removeShip(this.player1Ships.p1Ship4Length1);
       }
     }
   }
@@ -379,28 +429,57 @@ class DomPvC {
     this.gameStage.textContent = text;
   }
 
+  static randomShipPlacement() {
+    this.player1.gameBoard = new Gameboard();
+
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1ShipLength4);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship1Length3);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship2Length3);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship1Length2);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship2Length2);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship3Length2);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship1Length1);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship2Length1);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship3Length1);
+    this.player1.gameBoard.placeShipRandom(this.player1Ships.p1Ship4Length1);
+
+    this.numberOfShipsLength1 = -1;
+    this.numberOfShipsLength2 = -1;
+    this.numberOfShipsLength3 = -1;
+    this.numberOfShipsLength4 = -1;
+
+    this.player2.gameBoard = new Gameboard();
+
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2ShipLength4);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length3);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length3);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship3Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship3Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship4Length1);
+
+    this.shipLength4Count.textContent = "0x";
+    this.shipLength3Count.textContent = "0x";
+    this.shipLength2Count.textContent = "0x";
+    this.shipLength1Count.textContent = "0x";
+
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    console.log(this.player2.gameBoard.ships);
+  }
+
   static restartGame() {
     this.player1.gameBoard = new Gameboard();
     this.player2.gameBoard = new Gameboard();
     renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-    this.player2.gameBoard.placeShip(this.ships.shipLength4, 3, 3, "horizontal");
-    this.player1.gameBoard.placeShip(this.ships.shipLength4, 1, 1, "horizontal");
     this.changeGameStage("Place your ships!");
   }
 
   static getShips() {
-    this.ships = {
-      shipLength4: this.game.getShips().shipLength4,
-      ship1Length3: this.game.getShips().ship1Length3,
-      ship2Length3: this.game.getShips().ship2Length3,
-      ship1Length2: this.game.getShips().ship1Length2,
-      ship2Length2: this.game.getShips().ship2Length2,
-      ship3Length2: this.game.getShips().ship3Length2,
-      ship1Length1: this.game.getShips().ship1Length1,
-      ship2Length1: this.game.getShips().ship2Length1,
-      ship3Length1: this.game.getShips().ship3Length1,
-      ship4Length1: this.game.getShips().ship4Length1,
-    };
+    this.player1Ships = this.game.getShips().player1Ships;
+    this.player2Ships = this.game.getShips().player2Ships;
     this.isVertical = false;
   }
 
@@ -413,16 +492,16 @@ class DomPvC {
     this.player1 = players.player1;
     this.player2 = players.player2;
 
-    this.player2.gameBoard.placeShipRandom(this.ships.shipLength4);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length3);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length3);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length2);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length2);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship3Length2);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship1Length1);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship2Length1);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship3Length1);
-    this.player2.gameBoard.placeShipRandom(this.ships.ship4Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2ShipLength4);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length3);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length3);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship3Length2);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship1Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship2Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship3Length1);
+    this.player2.gameBoard.placeShipRandom(this.player2Ships.p2Ship4Length1);
   }
 
   static attackOpponent(ev) {
@@ -443,6 +522,7 @@ class DomPvC {
         this.computerAttack();
       }
     }
+    console.log(this.player2.gameBoard.coordinates);
   }
 
   static async computerAttack() {

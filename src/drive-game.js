@@ -8,27 +8,52 @@ function driveGame() {
     return { player1, player2 };
   }
   function getShips() {
-    const shipLength4 = new Ship(4);
-    const ship1Length3 = new Ship(3);
-    const ship2Length3 = new Ship(3);
-    const ship1Length2 = new Ship(2);
-    const ship2Length2 = new Ship(2);
-    const ship3Length2 = new Ship(2);
-    const ship1Length1 = new Ship(1);
-    const ship2Length1 = new Ship(1);
-    const ship3Length1 = new Ship(1);
-    const ship4Length1 = new Ship(1);
+    const p1ShipLength4 = new Ship(4);
+    const p1Ship1Length3 = new Ship(3);
+    const p1Ship2Length3 = new Ship(3);
+    const p1Ship1Length2 = new Ship(2);
+    const p1Ship2Length2 = new Ship(2);
+    const p1Ship3Length2 = new Ship(2);
+    const p1Ship1Length1 = new Ship(1);
+    const p1Ship2Length1 = new Ship(1);
+    const p1Ship3Length1 = new Ship(1);
+    const p1Ship4Length1 = new Ship(1);
+
+    const p2ShipLength4 = new Ship(4);
+    const p2Ship1Length3 = new Ship(3);
+    const p2Ship2Length3 = new Ship(3);
+    const p2Ship1Length2 = new Ship(2);
+    const p2Ship2Length2 = new Ship(2);
+    const p2Ship3Length2 = new Ship(2);
+    const p2Ship1Length1 = new Ship(1);
+    const p2Ship2Length1 = new Ship(1);
+    const p2Ship3Length1 = new Ship(1);
+    const p2Ship4Length1 = new Ship(1);
     return {
-      shipLength4,
-      ship1Length3,
-      ship2Length3,
-      ship1Length2,
-      ship2Length2,
-      ship3Length2,
-      ship1Length1,
-      ship2Length1,
-      ship3Length1,
-      ship4Length1,
+      player1Ships: {
+        p1ShipLength4,
+        p1Ship1Length3,
+        p1Ship2Length3,
+        p1Ship1Length2,
+        p1Ship2Length2,
+        p1Ship3Length2,
+        p1Ship1Length1,
+        p1Ship2Length1,
+        p1Ship3Length1,
+        p1Ship4Length1,
+      },
+      player2Ships: {
+        p2ShipLength4,
+        p2Ship1Length3,
+        p2Ship2Length3,
+        p2Ship1Length2,
+        p2Ship2Length2,
+        p2Ship3Length2,
+        p2Ship1Length1,
+        p2Ship2Length1,
+        p2Ship3Length1,
+        p2Ship4Length1,
+      },
     };
   }
   return { getPlayers, getShips };

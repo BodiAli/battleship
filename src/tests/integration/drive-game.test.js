@@ -8,18 +8,32 @@ describe("driveGame function", () => {
     expect(players.player2.name).toMatch("Mazen");
   });
 
-  test("driveGame should get ships", () => {
+  test("driveGame should get ships for two players", () => {
     const game = driveGame();
-    const ships = game.getShips();
-    expect(ships).toHaveProperty("shipLength4");
-    expect(ships).toHaveProperty("ship1Length3");
-    expect(ships).toHaveProperty("ship2Length3");
-    expect(ships).toHaveProperty("ship1Length2");
-    expect(ships).toHaveProperty("ship2Length2");
-    expect(ships).toHaveProperty("ship3Length2");
-    expect(ships).toHaveProperty("ship1Length1");
-    expect(ships).toHaveProperty("ship2Length1");
-    expect(ships).toHaveProperty("ship3Length1");
-    expect(ships).toHaveProperty("ship4Length1");
+    const players = game.getShips();
+    const { player1Ships } = players;
+    const { player2Ships } = players;
+
+    expect(player1Ships).toHaveProperty("p1ShipLength4");
+    expect(player1Ships).toHaveProperty("p1Ship1Length3");
+    expect(player1Ships).toHaveProperty("p1Ship2Length3");
+    expect(player1Ships).toHaveProperty("p1Ship1Length2");
+    expect(player1Ships).toHaveProperty("p1Ship2Length2");
+    expect(player1Ships).toHaveProperty("p1Ship3Length2");
+    expect(player1Ships).toHaveProperty("p1Ship1Length1");
+    expect(player1Ships).toHaveProperty("p1Ship2Length1");
+    expect(player1Ships).toHaveProperty("p1Ship3Length1");
+    expect(player1Ships).toHaveProperty("p1Ship4Length1");
+
+    expect(player2Ships).toHaveProperty("p2ShipLength4");
+    expect(player2Ships).toHaveProperty("p2Ship1Length3");
+    expect(player2Ships).toHaveProperty("p2Ship2Length3");
+    expect(player2Ships).toHaveProperty("p2Ship1Length2");
+    expect(player2Ships).toHaveProperty("p2Ship2Length2");
+    expect(player2Ships).toHaveProperty("p2Ship3Length2");
+    expect(player2Ships).toHaveProperty("p2Ship1Length1");
+    expect(player2Ships).toHaveProperty("p2Ship2Length1");
+    expect(player2Ships).toHaveProperty("p2Ship3Length1");
+    expect(player2Ships).toHaveProperty("p2Ship4Length1");
   });
 });

@@ -11,19 +11,18 @@ const choosePlayerVs = {
     this.secondVersionMainContent = document.querySelector("main.v-2.p-vs-c");
     this.playerVsComputerStart = document.getElementById("p-vs-c-start");
     this.playerVsComputerForm = document.getElementById("p-vs-c-form");
-    this.mainMenuButton = document.getElementById("main-menu");
+    console.log(this.firstVersionContainerContent);
   },
   bindEvents() {
     this.playerVsComputerButton.addEventListener("click", this.hideContent.bind(this));
     this.playerVsPlayerButton.addEventListener("click", this.hideContent.bind(this));
     this.firstVersionMainContent.addEventListener("transitionend", this.viewContent.bind(this));
-    this.playerVsComputerStart.addEventListener("click", this.hideSecondVersionMainContent.bind(this));
     this.firstVersionContainerContent.addEventListener(
       "transitionend",
       this.viewSecondVersionContainerContent.bind(this)
     );
-    // this.playerVsComputerForm.addEventListener("submit", this.getPlayerName);
-    this.mainMenuButton.addEventListener("click", this.backToMainMenu.bind(this));
+    this.secondVersionContainerContent.addEventListener("transitionend", this.backToMainMenu.bind(this));
+    this.playerVsComputerForm.addEventListener("submit", this.getPlayerName.bind(this));
   },
   init() {
     this.cacheDom();
@@ -42,28 +41,28 @@ const choosePlayerVs = {
   viewContent(ev) {
     if (ev.propertyName === "opacity") {
       this.firstVersionMainContent.classList.add("removed");
+      this.firstVersionMainContent.classList.remove("hidden");
       this.secondVersionMainContent.classList.remove("removed");
     }
-  },
-  hideSecondVersionMainContent() {
-    this.firstVersionContainerContent.classList.add("hidden");
-    this.secondVersionMainContent.classList.add("removed");
   },
   viewSecondVersionContainerContent(ev) {
     if (ev.target === this.firstVersionContainerContent && ev.propertyName === "opacity") {
       this.firstVersionContainerContent.classList.add("removed");
+      this.firstVersionContainerContent.classList.remove("hidden");
+      this.secondVersionContainerContent.classList.remove("hidden");
       this.secondVersionContainerContent.classList.remove("removed");
     }
   },
   getPlayerName(ev) {
     ev.preventDefault();
+    this.firstVersionContainerContent.classList.add("hidden");
+    this.secondVersionMainContent.classList.add("removed");
   },
-  backToMainMenu() {
-    this.secondVersionContainerContent.classList.add("removed");
-    this.firstVersionContainerContent.classList.remove("removed");
-    this.firstVersionContainerContent.classList.remove("hidden");
+  backToMainMenu(ev) {
+    if (ev.target === this.secondVersionContainerContent && ev.propertyName === "opacity")
+      this.firstVersionContainerContent.classList.remove("removed");
     this.firstVersionMainContent.classList.remove("removed");
-    this.firstVersionMainContent.classList.remove("hidden");
+    this.secondVersionContainerContent.classList.add("removed");
   },
 };
 

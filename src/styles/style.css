@@ -28,7 +28,6 @@ body {
   background-image: url("../images/battleship-background.png");
   background-repeat: no-repeat;
   background-position: center;
-  transition: opacity 0.2s ease;
 }
 
 header.v-1 {
@@ -54,7 +53,6 @@ main.v-1 {
   grid-row: 2 / 4;
   display: flex;
   justify-content: center;
-  transition: opacity 0.2s ease;
 }
 
 main.v-2.p-vs-c {
@@ -392,6 +390,7 @@ div.grid {
 
 .cell {
   border: 1px solid #574142ab;
+  cursor: pointer;
 }
 
 .cell-busy {
@@ -468,8 +467,15 @@ div.grid {
   opacity: 0.5;
 }
 
+.disabled {
+  opacity: 0.7;
+  border: none;
+  cursor: not-allowed;
+}
+
 .hidden {
   opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .removed {

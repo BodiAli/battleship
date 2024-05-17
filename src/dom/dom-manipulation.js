@@ -38,7 +38,9 @@ class DomPvC {
 
   static cacheDom() {
     this.randomizeButton = document.getElementById("p-vs-c-randomize");
-    this.startButton = document.getElementById("p-vs-c-start");
+    this.clearButton = document.getElementById("p-vs-c-clear");
+    this.startButton = document.getElementById("p-vs-c-start-game");
+
     this.restartButton = document.getElementById("restart-game-p-vs-c");
 
     this.player1Cells = document.querySelectorAll("#player-grid > .cell");
@@ -55,11 +57,29 @@ class DomPvC {
     this.shipLength3Count = document.getElementById("ship-3-count");
     this.shipLength2Count = document.getElementById("ship-2-count");
     this.shipLength1Count = document.getElementById("ship-1-count");
+
+    this.mainMenu = document.getElementById("main-menu");
   }
 
   static bindEvents() {
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
+
     this.randomizeButton.addEventListener("click", this.randomShipPlacement.bind(this));
+    this.randomizeButton.addEventListener("transitionend", (ev) => {
+      ev.target.classList.add("removed");
+      ev.target.classList.remove("hidden");
+    });
+    this.clearButton.addEventListener("click", this.clearBoard.bind(this));
+    this.clearButton.addEventListener("transitionend", (ev) => {
+      ev.target.classList.add("removed");
+      ev.target.classList.remove("hidden");
+    });
+    this.startButton.addEventListener("click", this.startGame.bind(this));
+    this.startButton.addEventListener("transitionend", (ev) => {
+      ev.target.classList.add("removed");
+      ev.target.classList.remove("hidden");
+    });
+
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
     });
@@ -112,12 +132,13 @@ class DomPvC {
       element.classList.remove("dragging");
       renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     });
+
+    this.mainMenu.addEventListener("click", this.returnToMainMenu.bind(this));
   }
 
   static appendShip(ev) {
     const cell = ev.target;
     const element = document.querySelector(".dragging");
-    this.clickToChangeDirectionCell = cell;
     if (element && element.id.includes("ship-4")) {
       if (this.numberOfShipsLength4 === 0) {
         const isPlaced = this.player1.gameBoard.placeShip(
@@ -227,6 +248,8 @@ class DomPvC {
         }
       }
     }
+    this.shipsPlaced();
+    this.checkGameReady();
     renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
   }
 
@@ -418,7 +441,7 @@ class DomPvC {
   }
 
   static changeGameStage(text) {
-    if (this.isGameOver()) {
+    if (this.isGameOver() && this.isGameReady) {
       if (this.player2.gameBoard.isAllSunk()) {
         this.gameStage.textContent = "You Won!";
       } else if (this.player1.gameBoard.isAllSunk()) {
@@ -466,15 +489,60 @@ class DomPvC {
     this.shipLength2Count.textContent = "0x";
     this.shipLength1Count.textContent = "0x";
 
+    this.isGameReady = true;
+    this.shipsPlaced();
+    this.checkGameReady();
     renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
-    console.log(this.player2.gameBoard.ships);
+  }
+
+  static clearBoard() {
+    this.player1.gameBoard = new Gameboard();
+    this.numberOfShipsLength1 = 4;
+    this.numberOfShipsLength2 = 3;
+    this.numberOfShipsLength3 = 2;
+    this.numberOfShipsLength4 = 1;
+
+    this.shipLength4Count.textContent = `${this.numberOfShipsLength4}x`;
+    this.shipLength3Count.textContent = `${this.numberOfShipsLength3}x`;
+    this.shipLength2Count.textContent = `${this.numberOfShipsLength2}x`;
+    this.shipLength1Count.textContent = `${this.numberOfShipsLength1}x`;
+
+    this.isGameReady = false;
+    this.shipsPlaced();
+    this.checkGameReady();
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+  }
+
+  static checkGameReady() {
+    if (this.isGameReady) {
+      this.startButton.classList.remove("disabled");
+    } else {
+      this.startButton.classList.add("disabled");
+    }
+  }
+
+  static startGame(ev) {
+    if (this.isGameReady) {
+      this.start = true;
+      this.randomizeButton.classList.add("hidden");
+      this.clearButton.classList.add("hidden");
+      ev.target.classList.add("hidden");
+    } else if (!this.isGameReady) {
+      this.start = false;
+    }
   }
 
   static restartGame() {
+    this.isGameReady = false;
+    this.start = false;
     this.player1.gameBoard = new Gameboard();
     this.player2.gameBoard = new Gameboard();
-    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     this.changeGameStage("Place your ships!");
+
+    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
+    this.randomizeButton.classList.remove("removed");
+    this.clearButton.classList.remove("removed");
+    this.startButton.classList.remove("removed");
   }
 
   static getShips() {
@@ -484,7 +552,13 @@ class DomPvC {
   }
 
   static shipsPlaced() {
-    return this.player1.gameBoard.ships.length === 10;
+    const isShipsPlaced =
+      this.player1.gameBoard.ships.length === 10 && this.player2.gameBoard.ships.length === 10;
+    if (isShipsPlaced) {
+      this.isGameReady = true;
+      return true;
+    }
+    return false;
   }
 
   static getPlayers() {
@@ -505,7 +579,7 @@ class DomPvC {
   }
 
   static attackOpponent(ev) {
-    if (this.shipsPlaced() && !this.isGameOver() && this.player1Turn) {
+    if (this.shipsPlaced() && this.start && !this.isGameOver() && this.player1Turn) {
       const cell = ev.target;
       if (!cell.isHit && !cell.isAdjacent) {
         const shipHit = this.player2.gameBoard.receiveAttack(cell.coord.x, cell.coord.y);
@@ -522,7 +596,6 @@ class DomPvC {
         this.computerAttack();
       }
     }
-    console.log(this.player2.gameBoard.coordinates);
   }
 
   static async computerAttack() {
@@ -553,6 +626,10 @@ class DomPvC {
       return true;
     }
     return false;
+  }
+
+  static returnToMainMenu() {
+    choosePlayerVs.secondVersionContainerContent.classList.add("hidden");
   }
 }
 DomPvC.init();

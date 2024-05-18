@@ -2,7 +2,7 @@ import Player from "./factories/player.js";
 import Ship from "./factories/ship.js";
 
 function driveGame() {
-  function getPlayers(name1, name2 = "Computer") {
+  function getPlayers(name1 = "", name2 = "") {
     const player1 = new Player(name1);
     const player2 = new Player(name2);
     return { player1, player2 };

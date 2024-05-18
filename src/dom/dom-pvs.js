@@ -5,13 +5,18 @@ const choosePlayerVs = {
   cacheDom() {
     this.firstVersionContainerContent = document.getElementById("v-1");
     this.secondVersionContainerContent = document.getElementById("v-2");
+
     this.playerVsPlayerButton = document.querySelector("button.pvs-btn.player");
     this.playerVsComputerButton = document.querySelector("button.pvs-btn.computer");
+
     this.firstVersionMainContent = document.querySelector("main.v-1");
     this.secondVersionMainContent = document.querySelector("main.v-2.p-vs-c");
+
     this.playerVsComputerStart = document.getElementById("p-vs-c-start");
     this.playerVsComputerForm = document.getElementById("p-vs-c-form");
-    console.log(this.firstVersionContainerContent);
+
+    this.displayPlayerName = document.getElementById("player-name");
+    this.getPlayerNameInput = document.getElementById("p-vs-c-name");
   },
   bindEvents() {
     this.playerVsComputerButton.addEventListener("click", this.hideContent.bind(this));
@@ -57,6 +62,10 @@ const choosePlayerVs = {
     ev.preventDefault();
     this.firstVersionContainerContent.classList.add("hidden");
     this.secondVersionMainContent.classList.add("removed");
+
+    this.playerName = this.getPlayerNameInput.value;
+    this.displayPlayerName.textContent = this.playerName;
+    this.getPlayerNameInput.value = "";
   },
   backToMainMenu(ev) {
     if (ev.target === this.secondVersionContainerContent && ev.propertyName === "opacity")

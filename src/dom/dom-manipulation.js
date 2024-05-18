@@ -3,9 +3,11 @@ import renderCells from "./render-cells.js";
 import createCells from "./create-cells.js";
 import Gameboard from "../factories/gameboard.js";
 import choosePlayerVs from "./dom-pvs.js";
+import SoundEffect from "../play-audio.js";
 
 class DomPvC {
   static init() {
+    this.soundOn = true;
     this.getPlayerTurns();
     this.getShipsCount();
     this.game = driveGame();
@@ -36,7 +38,18 @@ class DomPvC {
     return { grid1, grid2 };
   }
 
+  static toggleSound(ev) {
+    ev.target.classList.toggle("off");
+    if (this.soundOn) {
+      this.soundOn = false;
+    } else {
+      this.soundOn = true;
+    }
+  }
+
   static cacheDom() {
+    this.toggleSoundElement = document.getElementById("toggle-sound");
+
     this.randomizeButton = document.getElementById("p-vs-c-randomize");
     this.clearButton = document.getElementById("p-vs-c-clear");
     this.startButton = document.getElementById("p-vs-c-start-game");
@@ -62,20 +75,25 @@ class DomPvC {
   }
 
   static bindEvents() {
+    this.toggleSoundElement.addEventListener("click", this.toggleSound.bind(this));
+
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
 
     this.randomizeButton.addEventListener("click", this.randomShipPlacement.bind(this));
     this.randomizeButton.addEventListener("transitionend", (ev) => {
+      ev.stopPropagation();
       ev.target.classList.add("removed");
       ev.target.classList.remove("hidden");
     });
     this.clearButton.addEventListener("click", this.clearBoard.bind(this));
     this.clearButton.addEventListener("transitionend", (ev) => {
+      ev.stopPropagation();
       ev.target.classList.add("removed");
       ev.target.classList.remove("hidden");
     });
     this.startButton.addEventListener("click", this.startGame.bind(this));
     this.startButton.addEventListener("transitionend", (ev) => {
+      ev.stopPropagation();
       ev.target.classList.add("removed");
       ev.target.classList.remove("hidden");
     });
@@ -535,11 +553,10 @@ class DomPvC {
   static restartGame() {
     this.isGameReady = false;
     this.start = false;
-    this.player1.gameBoard = new Gameboard();
     this.player2.gameBoard = new Gameboard();
+    this.clearBoard();
     this.changeGameStage("Place your ships!");
 
-    renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     this.randomizeButton.classList.remove("removed");
     this.clearButton.classList.remove("removed");
     this.startButton.classList.remove("removed");
@@ -562,7 +579,7 @@ class DomPvC {
   }
 
   static getPlayers() {
-    const players = this.game.getPlayers("bodi");
+    const players = this.game.getPlayers();
     this.player1 = players.player1;
     this.player2 = players.player2;
 
@@ -587,20 +604,28 @@ class DomPvC {
         if (shipHit === true) {
           this.player2Turn = false;
           this.player1Turn = true;
+          if (this.soundOn) {
+            SoundEffect.playIfHit();
+          }
+          this.changeGameStage("Your turn!");
         } else {
           this.player2Turn = true;
           this.player1Turn = false;
+          if (this.soundOn) {
+            SoundEffect.playIfMiss();
+          }
+          this.changeGameStage("Computer's turn!");
         }
 
-        this.changeGameStage("Your turn!");
-        this.computerAttack();
+        setTimeout(() => {
+          this.computerAttack();
+        }, 700);
       }
     }
   }
 
   static async computerAttack() {
     if (!this.isGameOver() && this.player2Turn) {
-      this.changeGameStage("Computer's turn!");
       let shipHit;
       do {
         shipHit = this.player1.gameBoard.receiveAttackRandom();
@@ -609,8 +634,13 @@ class DomPvC {
           setTimeout(() => {
             renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
             resolve();
-          }, 300);
+          }, 700);
         });
+        if (!shipHit && this.soundOn) {
+          SoundEffect.playIfMiss();
+        } else if (shipHit && this.soundOn) {
+          SoundEffect.playIfHit();
+        }
       } while (shipHit && !this.isGameOver());
       this.player1Turn = true;
       this.player2Turn = false;
@@ -630,6 +660,7 @@ class DomPvC {
 
   static returnToMainMenu() {
     choosePlayerVs.secondVersionContainerContent.classList.add("hidden");
+    this.restartGame();
   }
 }
 DomPvC.init();

@@ -55,13 +55,13 @@ main.v-1 {
   justify-content: center;
 }
 
-main.v-2.p-vs-c {
+main.v-2.player-form {
   grid-column: 1 / 5;
   grid-row: 2 / 4;
   display: flex;
   justify-content: center;
 }
-main.v-2.p-vs-c form {
+main.v-2.player-form form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,7 +86,7 @@ main.v-2.p-vs-c form {
   width: 100%;
   border-radius: 5px;
 }
-main.v-2.p-vs-c form > h2 {
+main.v-2.player-form form > h2 {
   background-image: radial-gradient(
     circle,
     #cbd1d0,
@@ -109,7 +109,7 @@ main.v-2.p-vs-c form > h2 {
   color: transparent;
   text-shadow: 1px 1px 12px white;
 }
-main.v-2.p-vs-c form > input {
+main.v-2.player-form form > input {
   background-image: radial-gradient(
     circle,
     #cbd1d0,
@@ -135,7 +135,7 @@ main.v-2.p-vs-c form > input {
   font-size: 1rem;
   font-family: anton;
 }
-main.v-2.p-vs-c form > button {
+main.v-2.player-form form > button {
   height: 20%;
   width: 10%;
   font-size: 1.4rem;
@@ -161,12 +161,12 @@ main.v-2.p-vs-c form > button {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 100ms ease;
   cursor: pointer;
 }
-main.v-2.p-vs-c form > button:hover {
+main.v-2.player-form form > button:hover {
   background-color: #4c716f;
   border-color: rgba(165, 42, 42, 0.438);
 }
 
-main.v-2.p-vs-c form > button:active {
+main.v-2.player-form form > button:active {
   color: rgba(255, 255, 255, 0.424);
   background-color: white;
 }
@@ -272,7 +272,106 @@ main.v-3.p-vs-c {
   justify-items: center;
 }
 
-main.v-3.p-vs-c > div#game-buttons {
+#p-vs-p-boards {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5fr 0.7fr;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+#p-vs-p-boards > div.grid-container2 > .player-pieces {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0 1.3rem;
+}
+#p-vs-p-boards > div.grid-container2 > .coords-num {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  width: 1rem;
+  justify-self: end;
+}
+
+#p-vs-p-boards > div.grid-container2 > .coords-letters {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+  height: 1rem;
+  align-self: end;
+}
+
+#p-vs-p-boards > div.grid-container2 > p {
+  grid-column: 3 / 4;
+  grid-row: 3 / 4;
+}
+
+#p-vs-p-boards > div.grid-container1,
+#p-vs-p-boards > div.grid-container2 {
+  grid-row: 1 / 2;
+  display: grid;
+  grid-template-columns: 0.1fr 0.1fr 2fr;
+  grid-template-rows: 0.1fr 2fr 0.1fr;
+  gap: 2px;
+}
+#p-vs-p-boards > div.grid-container1 > div.grid,
+#p-vs-p-boards > div.grid-container2 > div.grid {
+  border: 2px solid black;
+  height: 25rem;
+  width: 25rem;
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
+#p-vs-p-boards #modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+}
+
+#p-vs-p-boards #modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#p-vs-p-boards #attacking-modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+}
+
+#p-vs-p-boards #attacking-modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+main.v-3.p-vs-c > div#p-vs-c-game-buttons {
   grid-area: 2 / 1 / 3 / 2;
   align-self: center;
   justify-self: start;
@@ -298,6 +397,7 @@ div.grid-container1 > .player-pieces {
   justify-content: space-around;
   padding: 0 1.3rem;
 }
+
 .ship-container {
   display: flex;
   flex-direction: column;
@@ -375,6 +475,7 @@ main.v-3.p-vs-c > div.grid-container1 > div.grid {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
 }
+
 main.v-3.p-vs-c > div.grid-container2 > div.grid {
   border: 2px solid black;
   height: 25rem;

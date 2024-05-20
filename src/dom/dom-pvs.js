@@ -3,6 +3,8 @@ const choosePlayerVs = {
   playerVsComputer: false,
 
   cacheDom() {
+    this.mainMenuButton = document.getElementById("main-menu");
+
     this.firstVersionContainerContent = document.getElementById("v-1");
     this.secondVersionContainerContent = document.getElementById("v-2");
 
@@ -10,10 +12,15 @@ const choosePlayerVs = {
     this.playerVsComputerButton = document.querySelector("button.pvs-btn.computer");
 
     this.firstVersionMainContent = document.querySelector("main.v-1");
-    this.secondVersionMainContent = document.querySelector("main.v-2.p-vs-c");
+    this.secondVersionMainContent = document.querySelector("main.v-2.player-form");
 
     this.playerVsComputerStart = document.getElementById("p-vs-c-start");
     this.playerVsComputerForm = document.getElementById("p-vs-c-form");
+
+    this.playerVsComputerBoards = document.getElementById("p-vs-c-boards");
+    this.playerVsPlayerBoards = document.getElementById("p-vs-p-boards");
+
+    this.playerVsPlayerForm = document.getElementById("p-vs-player-form");
 
     this.displayPlayerName = document.getElementById("player-name");
     this.getPlayerNameInput = document.getElementById("p-vs-c-name");
@@ -26,8 +33,10 @@ const choosePlayerVs = {
       "transitionend",
       this.viewSecondVersionContainerContent.bind(this)
     );
-    this.secondVersionContainerContent.addEventListener("transitionend", this.backToMainMenu.bind(this));
+    this.mainMenuButton.addEventListener("click", this.backToMainMenu.bind(this));
     this.playerVsComputerForm.addEventListener("submit", this.getPlayerName.bind(this));
+
+    this.playerVsPlayerForm.addEventListener("submit", this.getPlayersName.bind(this));
   },
   init() {
     this.cacheDom();
@@ -37,10 +46,13 @@ const choosePlayerVs = {
     if (ev.target.classList.contains("player")) {
       this.playerVsPlayer = true;
       this.playerVsComputer = false;
+      this.firstVersionMainContent.classList.add("hidden");
+      this.playerVsPlayerForm.classList.remove("removed");
     } else if (ev.target.classList.contains("computer")) {
       this.playerVsComputer = true;
       this.playerVsPlayer = false;
       this.firstVersionMainContent.classList.add("hidden");
+      this.playerVsComputerForm.classList.remove("removed");
     }
   },
   viewContent(ev) {
@@ -51,12 +63,32 @@ const choosePlayerVs = {
     }
   },
   viewSecondVersionContainerContent(ev) {
-    if (ev.target === this.firstVersionContainerContent && ev.propertyName === "opacity") {
+    if (
+      ev.target === this.firstVersionContainerContent &&
+      ev.propertyName === "opacity" &&
+      this.playerVsComputer
+    ) {
       this.firstVersionContainerContent.classList.add("removed");
       this.firstVersionContainerContent.classList.remove("hidden");
       this.secondVersionContainerContent.classList.remove("hidden");
       this.secondVersionContainerContent.classList.remove("removed");
+      this.playerVsComputerBoards.classList.remove("removed");
+    } else if (
+      ev.target === this.firstVersionContainerContent &&
+      ev.propertyName === "opacity" &&
+      this.playerVsPlayer
+    ) {
+      this.firstVersionContainerContent.classList.add("removed");
+      this.firstVersionContainerContent.classList.remove("hidden");
+      this.secondVersionContainerContent.classList.remove("hidden");
+      this.secondVersionContainerContent.classList.remove("removed");
+      this.playerVsPlayerBoards.classList.remove("removed");
     }
+  },
+  getPlayersName(ev) {
+    ev.preventDefault();
+    this.firstVersionContainerContent.classList.add("hidden");
+    this.secondVersionMainContent.classList.add("removed");
   },
   getPlayerName(ev) {
     ev.preventDefault();
@@ -67,11 +99,15 @@ const choosePlayerVs = {
     this.displayPlayerName.textContent = this.playerName;
     this.getPlayerNameInput.value = "";
   },
-  backToMainMenu(ev) {
-    if (ev.target === this.secondVersionContainerContent && ev.propertyName === "opacity")
-      this.firstVersionContainerContent.classList.remove("removed");
+  backToMainMenu() {
+    this.firstVersionContainerContent.classList.remove("removed");
     this.firstVersionMainContent.classList.remove("removed");
     this.secondVersionContainerContent.classList.add("removed");
+    this.playerVsComputerForm.classList.add("removed");
+    this.playerVsPlayerForm.classList.add("removed");
+    this.playerVsComputerBoards.classList.add("removed");
+
+    this.playerVsPlayerBoards.classList.add("removed");
   },
 };
 

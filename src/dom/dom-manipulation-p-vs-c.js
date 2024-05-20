@@ -659,7 +659,7 @@ class DomPvC {
   }
 
   static returnToMainMenu() {
-    choosePlayerVs.secondVersionContainerContent.classList.add("hidden");
+    choosePlayerVs.backToMainMenu();
     this.restartGame();
   }
 }

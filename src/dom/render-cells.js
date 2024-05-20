@@ -1,9 +1,10 @@
 import choosePlayerVs from "./dom-pvs.js";
+import toggleBoards from "../toggle-ships-visibility.js";
 
 function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
   gameBoardObj1.coordinates.forEach((coordinate) => {
     const arr = Array.from(domCells1);
-    if (coordinate.ship !== null && coordinate.isHit === false) {
+    if (coordinate.ship !== null && coordinate.isHit === false && !toggleBoards.hideBoards) {
       const targetCell = arr.find(
         (domCell) => domCell.coord.x === coordinate.x && domCell.coord.y === coordinate.y
       );
@@ -45,7 +46,7 @@ function renderCells(domCells1, domCells2, gameBoardObj1, gameBoardObj2) {
 
   gameBoardObj2.coordinates.forEach((coordinate) => {
     const arr = Array.from(domCells2);
-    if (coordinate.ship !== null && coordinate.isHit === false) {
+    if (coordinate.ship !== null && coordinate.isHit === false && !toggleBoards.hideBoards) {
       if (choosePlayerVs.playerVsPlayer) {
         const targetCell = arr.find(
           (domCell) => domCell.coord.x === coordinate.x && domCell.coord.y === coordinate.y

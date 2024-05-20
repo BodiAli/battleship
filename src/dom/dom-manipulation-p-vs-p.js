@@ -102,7 +102,7 @@ class DomPvP {
     this.hideModalButton.addEventListener("click", this.showOtherPlayerBoard.bind(this));
 
     this.hideAttackingModalButton.addEventListener("click", this.showNextPlayerToAttackBoard.bind(this));
-    // this.restartButton.addEventListener("click", this.restartGame.bind(this));
+    this.restartButton.addEventListener("click", this.restartGame.bind(this));
 
     this.p1RandomizeButton.addEventListener("click", this.p1RandomShipPlacement.bind(this));
     this.p1RandomizeButton.addEventListener("transitionend", (ev) => {
@@ -1118,13 +1118,30 @@ class DomPvP {
   static restartGame() {
     this.isGameReady = false;
     this.start = false;
-    this.player2.gameBoard = new Gameboard();
+    this.player1Turn = false;
+    this.player2Turn = true;
+    this.attackNextPlayer = false;
+    this.player1BoardShowed = true;
+    this.player2BoardShowed = false;
+    toggleBoards.hideBoards = false;
+
     this.clearBoard();
     this.changeGameStage("Place your ships!");
 
     this.p1RandomizeButton.classList.remove("removed");
     this.p1ClearButton.classList.remove("removed");
-    this.startButton.classList.remove("removed");
+    this.showNextPlayerBoardButton.classList.remove("removed");
+    this.player1Container.classList.remove("removed");
+
+    this.player2Container.classList.add("removed");
+    this.p2RandomizeButton.classList.add("removed");
+    this.p2ClearButton.classList.add("removed");
+    this.startButton.classList.add("removed");
+    this.attackNextPlayerButton.classList.add("removed");
+
+    this.checkAttackNextPlayerIsReady();
+    this.checkGameReady();
+    this.checkNextPlayerIsReady();
   }
 
   static getShips() {

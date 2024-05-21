@@ -257,9 +257,11 @@ header.v-2 > p {
   padding: 10px;
   border-radius: 5px;
 }
-header.v-2 > h3 {
-  color: green;
+.sound {
+  width: 7%;
   justify-self: end;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 main.v-3.p-vs-c {
@@ -336,17 +338,26 @@ main.v-3.p-vs-c {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(70px);
 }
 
 #p-vs-p-boards #modal {
-  background: #fff;
+  background-color: rgba(173, 216, 230, 0.926);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 100%;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#p-vs-p-boards #modal > p {
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
 #p-vs-p-boards #attacking-modal-overlay {
@@ -358,17 +369,27 @@ main.v-3.p-vs-c {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(70px);
 }
 
 #p-vs-p-boards #attacking-modal {
-  background: #fff;
+  background-color: rgba(173, 216, 230, 0.926);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 100%;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#p-vs-p-boards #attacking-modal > p {
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
 main.v-3.p-vs-c > div#p-vs-c-game-buttons {
@@ -377,6 +398,76 @@ main.v-3.p-vs-c > div#p-vs-c-game-buttons {
   justify-self: start;
   display: flex;
   gap: 20px;
+}
+
+div#p-vs-c-game-buttons > button,
+div#p-vs-c-restart-buttons > button,
+#buttons-container > #game-buttons > button,
+#buttons-container > #restart-buttons > button,
+#p-vs-p-boards #modal > button,
+#p-vs-p-boards #attacking-modal > button {
+  height: 20%;
+  font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  background-image: linear-gradient(
+    to right bottom,
+    #696969,
+    #7d7f84,
+    #8e97a0,
+    #9cb1bb,
+    #aaccd3,
+    #aad2d7,
+    #abd8d9,
+    #acdedbd9,
+    #9ed1ce96,
+    #8fc4c0ba,
+    #81b7b3,
+    #73aaa6
+  );
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: var(--main-bg);
+  color: #221d1d;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 100ms ease;
+  cursor: pointer;
+  text-shadow: 1px 1px 15px black;
+}
+
+div#p-vs-c-game-buttons > button:hover,
+div#p-vs-c-restart-buttons > button:hover,
+#buttons-container > #game-buttons > button:hover,
+#buttons-container > #restart-buttons > button:hover,
+#p-vs-p-boards #modal > button:hover,
+#p-vs-p-boards #attacking-modal > button:hover {
+  background-color: #4c716f;
+  border-color: rgba(165, 42, 42, 0.438);
+}
+
+div#p-vs-c-game-buttons > button:active,
+div#p-vs-c-restart-buttons > button:active,
+#buttons-container > #game-buttons > button:active,
+#buttons-container > #restart-buttons > button:active,
+#p-vs-p-boards #modal > button:active,
+#p-vs-p-boards #attacking-modal > button:active {
+  color: rgba(255, 255, 255, 0.424);
+  background-color: white;
+}
+
+#buttons-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 5px;
+  justify-items: center;
+  align-items: center;
+}
+
+#buttons-container > #game-buttons {
+  grid-row: 1 / 2;
+}
+#buttons-container > #restart-buttons {
+  grid-row: 2 / 3;
 }
 
 main.v-3.p-vs-c > div.grid-container1 {
@@ -571,7 +662,7 @@ div.grid {
 .disabled {
   opacity: 0.7;
   border: none;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .hidden {

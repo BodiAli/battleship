@@ -1,10 +1,10 @@
+import DomPvP from "./dom-manipulation-p-vs-p.js";
+
 const choosePlayerVs = {
   playerVsPlayer: false,
   playerVsComputer: false,
 
   cacheDom() {
-    this.mainMenuButton = document.getElementById("main-menu");
-
     this.firstVersionContainerContent = document.getElementById("v-1");
     this.secondVersionContainerContent = document.getElementById("v-2");
 
@@ -24,16 +24,22 @@ const choosePlayerVs = {
 
     this.displayPlayerName = document.getElementById("player-name");
     this.getPlayerNameInput = document.getElementById("p-vs-c-name");
+
+    this.player1NameElement = document.getElementById("player-1-name");
+    this.player2NameElement = document.getElementById("player-2-name");
+
+    this.getPlayer1Name = document.getElementById("get-player-1-name");
+    this.getPlayer2Name = document.getElementById("get-player-2-name");
   },
   bindEvents() {
     this.playerVsComputerButton.addEventListener("click", this.hideContent.bind(this));
     this.playerVsPlayerButton.addEventListener("click", this.hideContent.bind(this));
+
     this.firstVersionMainContent.addEventListener("transitionend", this.viewContent.bind(this));
     this.firstVersionContainerContent.addEventListener(
       "transitionend",
       this.viewSecondVersionContainerContent.bind(this)
     );
-    this.mainMenuButton.addEventListener("click", this.backToMainMenu.bind(this));
     this.playerVsComputerForm.addEventListener("submit", this.getPlayerName.bind(this));
 
     this.playerVsPlayerForm.addEventListener("submit", this.getPlayersName.bind(this));
@@ -85,10 +91,19 @@ const choosePlayerVs = {
       this.playerVsPlayerBoards.classList.remove("removed");
     }
   },
+
   getPlayersName(ev) {
     ev.preventDefault();
     this.firstVersionContainerContent.classList.add("hidden");
     this.secondVersionMainContent.classList.add("removed");
+
+    this.player1Name = this.getPlayer1Name.value;
+    this.player2Name = this.getPlayer2Name.value;
+
+    this.player1NameElement.textContent = this.player1Name;
+    this.player2NameElement.textContent = this.player2Name;
+    DomPvP.init();
+    this.initialized = true;
   },
   getPlayerName(ev) {
     ev.preventDefault();
@@ -106,7 +121,6 @@ const choosePlayerVs = {
     this.playerVsComputerForm.classList.add("removed");
     this.playerVsPlayerForm.classList.add("removed");
     this.playerVsComputerBoards.classList.add("removed");
-
     this.playerVsPlayerBoards.classList.add("removed");
   },
 };

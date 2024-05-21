@@ -553,6 +553,8 @@ class DomPvC {
   static restartGame() {
     this.isGameReady = false;
     this.start = false;
+    this.player1Turn = true;
+    this.player2Turn = false;
     this.player2.gameBoard = new Gameboard();
     this.clearBoard();
     this.changeGameStage("Place your ships!");

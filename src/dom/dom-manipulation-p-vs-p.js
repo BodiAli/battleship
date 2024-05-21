@@ -11,14 +11,20 @@ class DomPvP {
     this.soundOn = true;
     choosePlayerVs.playerVsPlayer = true;
     this.game = driveGame();
-    this.getPlayerTurns();
-    this.getShipsCount();
-    this.getShips();
+    if (!choosePlayerVs.initialized) {
+      this.getPlayerTurns();
+      this.getShipsCount();
+      this.getShips();
+    }
     this.getPlayers();
-    this.getGrids();
-    createCells(this.player1.gameBoard, this.player2.gameBoard, this.grid1, this.grid2);
-    this.cacheDom();
-    this.bindEvents();
+    if (!choosePlayerVs.initialized) {
+      this.getGrids();
+    }
+    if (!choosePlayerVs.initialized) {
+      createCells(this.player1.gameBoard, this.player2.gameBoard, this.grid1, this.grid2);
+      this.cacheDom();
+      this.bindEvents();
+    }
   }
 
   static getShipsCount() {
@@ -41,7 +47,20 @@ class DomPvP {
     this.player2BoardShowed = false;
   }
 
+  static toggleSound(ev) {
+    if (this.soundOn) {
+      ev.target.classList.add("off");
+      this.soundOn = false;
+    } else {
+      ev.target.classList.remove("off");
+      this.soundOn = true;
+    }
+  }
+
   static cacheDom() {
+    this.placeShipsParagraph = document.getElementById("place-ships-p");
+    this.attackShipsParagraph = document.getElementById("attack-ships-p");
+
     this.playerPieces = document.querySelectorAll("#p-vs-p-boards .player-pieces");
 
     this.player1Container = document.getElementById("player-1-container");
@@ -88,14 +107,14 @@ class DomPvP {
     this.p2ShipLength2Count = document.getElementById("p-2-ship-2-count");
     this.p2ShipLength1Count = document.getElementById("p-2-ship-1-count");
 
-    this.mainMenu = document.getElementById("main-menu");
+    this.mainMenu = document.getElementById("p-v-p-main-menu");
 
     this.player1Cells = document.querySelectorAll("#player-1-grid > .cell");
     this.player2Cells = document.querySelectorAll("#player-2-grid > .cell");
   }
 
   static bindEvents() {
-    // this.toggleSoundElement.addEventListener("click", this.toggleSound.bind(this));
+    this.toggleSoundElement.addEventListener("click", this.toggleSound.bind(this));
     this.showNextPlayerBoardButton.addEventListener("click", this.showModal.bind(this));
     this.attackNextPlayerButton.addEventListener("click", this.showNextPlayerModal.bind(this));
 
@@ -132,12 +151,6 @@ class DomPvP {
     });
 
     this.startButton.addEventListener("click", this.startGame.bind(this));
-
-    // this.startButton.addEventListener("transitionend", (ev) => {
-    //   ev.stopPropagation();
-    //   ev.target.classList.add("removed");
-    //   ev.target.classList.remove("hidden");
-    // });
 
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("dragover", this.p2DisplayShipOnBoard.bind(this));
@@ -243,7 +256,7 @@ class DomPvP {
     this.mainMenu.addEventListener("click", this.returnToMainMenu.bind(this));
   }
 
-  static showOtherPlayerBoard(ev) {
+  static showOtherPlayerBoard() {
     this.modal.classList.add("removed");
     if (this.player1BoardShowed && !this.player2BoardShowed) {
       this.player1Container.classList.add("removed");
@@ -258,6 +271,7 @@ class DomPvP {
       this.player2Container.classList.remove("removed");
 
       this.startButton.classList.remove("removed");
+
       this.player1BoardShowed = false;
       this.player2BoardShowed = true;
     } else if (!this.player1BoardShowed && this.player2BoardShowed) {
@@ -295,7 +309,7 @@ class DomPvP {
   }
 
   static getPlayers() {
-    const players = this.game.getPlayers();
+    const players = this.game.getPlayers(choosePlayerVs.player1Name, choosePlayerVs.player2Name);
     this.player1 = players.player1;
     this.player2 = players.player2;
   }
@@ -921,9 +935,9 @@ class DomPvP {
   static changeGameStage(text) {
     if (this.isGameOver() && this.isGameReady) {
       if (this.player2.gameBoard.isAllSunk()) {
-        this.gameStage.textContent = "You Won!";
+        this.gameStage.textContent = `${this.player1.name} Won!`;
       } else if (this.player1.gameBoard.isAllSunk()) {
-        this.gameStage.textContent = "Computer Won!";
+        this.gameStage.textContent = `${this.player2.name} Won!`;
       }
       return;
     }
@@ -1085,12 +1099,19 @@ class DomPvP {
     if (this.isShowAttackNextPlayerButtonReady) {
       this.attackingModal.classList.remove("removed");
       this.attackNextPlayer = false;
+      if (this.player1Turn && !this.player2Turn) {
+        this.attackShipsParagraph.textContent = `Click continue to attack ${this.player2.name}'s board!`;
+      } else if (!this.player1Turn && this.player2Turn) {
+        this.attackShipsParagraph.textContent = `Click continue to attack ${this.player1.name}'s board!`;
+      }
     }
     this.checkAttackNextPlayerIsReady();
   }
 
   static showModal() {
     if (this.isShowNextPlayerBoardButtonReady) {
+      this.placeShipsParagraph.textContent = `Click continue to show ${this.player2.name}'s board`;
+
       this.modal.classList.remove("removed");
     }
   }
@@ -1108,6 +1129,10 @@ class DomPvP {
       this.p1RandomizeButton.classList.add("removed");
       this.p1ClearButton.classList.add("removed");
       this.p2ClearButton.classList.add("removed");
+
+      this.placeShipsParagraph.textContent = `Click continue to start attacking ${this.player1.name}'s board!`;
+
+      this.changeGameStage(`${this.player2.name}'s turn!`);
 
       renderCells(this.player1Cells, this.player2Cells, this.player1.gameBoard, this.player2.gameBoard);
     } else if (!this.isGameReady) {
@@ -1174,7 +1199,7 @@ class DomPvP {
           if (this.soundOn) {
             SoundEffect.playIfHit();
           }
-          this.changeGameStage("Your turn!");
+          this.changeGameStage(`${this.player1.name}'s turn!`);
         } else {
           this.player2Turn = true;
           this.player1Turn = false;
@@ -1183,7 +1208,7 @@ class DomPvP {
           if (this.soundOn) {
             SoundEffect.playIfMiss();
           }
-          this.changeGameStage("Computer's turn!");
+          this.changeGameStage(`${this.player2.name}'s turn!`);
           this.checkAttackNextPlayerIsReady();
         }
       }
@@ -1204,7 +1229,7 @@ class DomPvP {
           if (this.soundOn) {
             SoundEffect.playIfHit();
           }
-          this.changeGameStage("Your turn!");
+          this.changeGameStage(`${this.player2.name}'s turn!`);
         } else {
           this.player2Turn = false;
           this.player1Turn = true;
@@ -1213,7 +1238,7 @@ class DomPvP {
           if (this.soundOn) {
             SoundEffect.playIfMiss();
           }
-          this.changeGameStage("Computer's turn!");
+          this.changeGameStage(`${this.player1.name}'s turn!`);
           this.checkAttackNextPlayerIsReady();
         }
       }
@@ -1222,9 +1247,12 @@ class DomPvP {
 
   static isGameOver() {
     if (this.player1.gameBoard.isAllSunk()) {
+      this.attackNextPlayerButton.classList.add("removed");
+
       return true;
     }
     if (this.player2.gameBoard.isAllSunk()) {
+      this.attackNextPlayerButton.classList.add("removed");
       return true;
     }
     return false;
@@ -1235,5 +1263,4 @@ class DomPvP {
     this.restartGame();
   }
 }
-
-DomPvP.init();
+export default DomPvP;

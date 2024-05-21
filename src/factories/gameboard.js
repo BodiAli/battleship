@@ -1,5 +1,3 @@
-import Ship from "./ship.js";
-
 class Gameboard {
   constructor() {
     this.ships = [];
@@ -19,7 +17,6 @@ class Gameboard {
 
   placeShip(shipObject, xCoord, yCoord, direction) {
     if (xCoord > 10 || xCoord <= 0 || yCoord > 10 || yCoord <= 0) {
-      console.log("Invalid ship placement: Ship should be placed at coordinates between 1 to 10");
       return false;
     }
     const shipLength = shipObject.length;
@@ -34,7 +31,6 @@ class Gameboard {
     }
 
     if (!isValidPlacement) {
-      console.log("Invalid ship placement: Ship cannot be placed at the specified coordinates or direction");
       return false;
     }
 
@@ -52,7 +48,6 @@ class Gameboard {
         this.isCoordOccupied(x + 1, y - 1) ||
         this.isCoordOccupied(x - 1, y + 1)
       ) {
-        console.log("Invalid ship placement: Adjacent coordinates already have ships.");
         return false;
       }
       shipPositions.push({ x, y });

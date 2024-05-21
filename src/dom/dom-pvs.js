@@ -100,10 +100,13 @@ const choosePlayerVs = {
     this.player1Name = this.getPlayer1Name.value;
     this.player2Name = this.getPlayer2Name.value;
 
-    this.player1NameElement.textContent = this.player1Name;
-    this.player2NameElement.textContent = this.player2Name;
+    this.player1NameElement.textContent = `${this.player1Name}'s board`;
+    this.player2NameElement.textContent = `${this.player2Name}'s board`;
     DomPvP.init();
     this.initialized = true;
+
+    this.getPlayer1Name.value = "";
+    this.getPlayer2Name.value = "";
   },
   getPlayerName(ev) {
     ev.preventDefault();
@@ -111,7 +114,7 @@ const choosePlayerVs = {
     this.secondVersionMainContent.classList.add("removed");
 
     this.playerName = this.getPlayerNameInput.value;
-    this.displayPlayerName.textContent = this.playerName;
+    this.displayPlayerName.textContent = `${this.playerName}'s board`;
     this.getPlayerNameInput.value = "";
   },
   backToMainMenu() {

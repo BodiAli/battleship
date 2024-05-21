@@ -67,29 +67,10 @@ class DomPvC {
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
 
     this.randomizeButton.addEventListener("click", this.randomShipPlacement.bind(this));
-    this.randomizeButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      if (ev.propertyName === "opacity") {
-        ev.target.classList.add("removed");
-        ev.target.classList.remove("hidden");
-      }
-    });
+
     this.clearButton.addEventListener("click", this.clearBoard.bind(this));
-    this.clearButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      if (ev.propertyName === "opacity") {
-        ev.target.classList.add("removed");
-        ev.target.classList.remove("hidden");
-      }
-    });
+
     this.startButton.addEventListener("click", this.startGame.bind(this));
-    this.startButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      if (ev.propertyName === "opacity") {
-        ev.target.classList.add("removed");
-        ev.target.classList.remove("hidden");
-      }
-    });
 
     this.player2Cells.forEach((cell) => {
       cell.addEventListener("click", this.attackOpponent.bind(this));
@@ -535,9 +516,9 @@ class DomPvC {
   static startGame(ev) {
     if (this.isGameReady) {
       this.start = true;
-      this.randomizeButton.classList.add("hidden");
-      this.clearButton.classList.add("hidden");
-      ev.target.classList.add("hidden");
+      this.randomizeButton.classList.add("removed");
+      this.clearButton.classList.add("removed");
+      ev.target.classList.add("removed");
     } else if (!this.isGameReady) {
       this.start = false;
     }

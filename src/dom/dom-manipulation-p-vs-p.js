@@ -3,12 +3,12 @@ import renderCells from "./render-cells.js";
 import createCells from "./create-cells.js";
 import Gameboard from "../factories/gameboard.js";
 import choosePlayerVs from "./dom-pvs.js";
+import toggleSound from "../toggle-sound.js";
 import SoundEffect from "../play-audio.js";
 import toggleBoards from "../toggle-ships-visibility.js";
 
 class DomPvP {
   static init() {
-    this.soundOn = true;
     choosePlayerVs.playerVsPlayer = true;
     this.game = driveGame();
     if (!choosePlayerVs.initialized) {
@@ -47,16 +47,6 @@ class DomPvP {
     this.player2BoardShowed = false;
   }
 
-  static toggleSound(ev) {
-    if (this.soundOn) {
-      ev.target.classList.add("off");
-      this.soundOn = false;
-    } else {
-      ev.target.classList.remove("off");
-      this.soundOn = true;
-    }
-  }
-
   static cacheDom() {
     this.placeShipsParagraph = document.getElementById("place-ships-p");
     this.attackShipsParagraph = document.getElementById("attack-ships-p");
@@ -68,8 +58,6 @@ class DomPvP {
 
     this.showNextPlayerBoardButton = document.getElementById("show-next");
     this.attackNextPlayerButton = document.getElementById("attack-next-player");
-
-    this.toggleSoundElement = document.getElementById("toggle-sound");
 
     this.modal = document.getElementById("modal-overlay");
     this.hideModalButton = document.getElementById("hide-placing-ships-modal");
@@ -114,41 +102,21 @@ class DomPvP {
   }
 
   static bindEvents() {
-    this.toggleSoundElement.addEventListener("click", this.toggleSound.bind(this));
     this.showNextPlayerBoardButton.addEventListener("click", this.showModal.bind(this));
     this.attackNextPlayerButton.addEventListener("click", this.showNextPlayerModal.bind(this));
 
     this.hideModalButton.addEventListener("click", this.showOtherPlayerBoard.bind(this));
-
     this.hideAttackingModalButton.addEventListener("click", this.showNextPlayerToAttackBoard.bind(this));
+
     this.restartButton.addEventListener("click", this.restartGame.bind(this));
 
     this.p1RandomizeButton.addEventListener("click", this.p1RandomShipPlacement.bind(this));
-    this.p1RandomizeButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      ev.target.classList.add("removed");
-      ev.target.classList.remove("hidden");
-    });
 
     this.p2RandomizeButton.addEventListener("click", this.p2RandomShipPlacement.bind(this));
-    this.p2RandomizeButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      ev.target.classList.add("removed");
-      ev.target.classList.remove("hidden");
-    });
 
     this.p1ClearButton.addEventListener("click", this.p1ClearBoard.bind(this));
-    this.p1ClearButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      ev.target.classList.add("removed");
-      ev.target.classList.remove("hidden");
-    });
+
     this.p2ClearButton.addEventListener("click", this.p2ClearBoard.bind(this));
-    this.p2ClearButton.addEventListener("transitionend", (ev) => {
-      ev.stopPropagation();
-      ev.target.classList.add("removed");
-      ev.target.classList.remove("hidden");
-    });
 
     this.startButton.addEventListener("click", this.startGame.bind(this));
 
@@ -1048,7 +1016,6 @@ class DomPvP {
   }
 
   static p2ClearBoard() {
-    console.log("hi");
     this.player2.gameBoard = new Gameboard();
 
     this.p2NumberOfShipsLength1 = 4;
@@ -1196,7 +1163,7 @@ class DomPvP {
           this.player1Turn = true;
 
           this.attackNextPlayer = false;
-          if (this.soundOn) {
+          if (toggleSound.soundOn) {
             SoundEffect.playIfHit();
           }
           this.changeGameStage(`${this.player1.name}'s turn!`);
@@ -1205,7 +1172,7 @@ class DomPvP {
           this.player1Turn = false;
 
           this.attackNextPlayer = true;
-          if (this.soundOn) {
+          if (toggleSound.soundOn) {
             SoundEffect.playIfMiss();
           }
           this.changeGameStage(`${this.player2.name}'s turn!`);
@@ -1226,7 +1193,7 @@ class DomPvP {
           this.player1Turn = false;
 
           this.attackNextPlayer = false;
-          if (this.soundOn) {
+          if (toggleSound.soundOn) {
             SoundEffect.playIfHit();
           }
           this.changeGameStage(`${this.player2.name}'s turn!`);
@@ -1235,7 +1202,7 @@ class DomPvP {
           this.player1Turn = true;
 
           this.attackNextPlayer = true;
-          if (this.soundOn) {
+          if (toggleSound.soundOn) {
             SoundEffect.playIfMiss();
           }
           this.changeGameStage(`${this.player1.name}'s turn!`);

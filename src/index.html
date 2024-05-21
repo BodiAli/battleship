@@ -19,14 +19,14 @@
       <main class="v-2 player-form removed">
         <form id="p-vs-c-form" class="removed">
           <h2>ENTER PLAYER NAME:</h2>
-          <input type="text" name="player-name" id="p-vs-c-name" />
+          <input type="text" name="player-name" id="p-vs-c-name" required />
           <button type="submit" id="p-vs-c-start">START GAME</button>
         </form>
         <form id="p-vs-player-form" class="removed">
           <h2>ENTER PLAYER ONE NAME:</h2>
-          <input type="text" name="player-1-name" id="get-player-1-name" />
+          <input type="text" name="player-1-name" id="get-player-1-name" required />
           <h2>ENTER PLAYER TWO NAME:</h2>
-          <input type="text" name="player-2-name" id="get-player-2-name" />
+          <input type="text" name="player-2-name" id="get-player-2-name" required />
           <button type="submit" id="p-vs-player-start">START GAME</button>
         </form>
       </main>
@@ -35,8 +35,8 @@
       <header class="v-2">
         <h1>Battleship</h1>
         <p id="game-stage">Place your ships!</p>
-        <img id="sound-on" class="on sound" src="./images/sound-on.png" alt="sound-on" />
-        <img id="sound-off" class="off sound removed" src="./images/off.png" alt="sound-off" />
+        <img id="sound-on" class="sound" src="./images/sound-on.png" alt="sound-on" />
+        <img id="sound-off" class="sound removed" src="./images/off.png" alt="sound-off" />
       </header>
       <main id="p-vs-c-boards" class="v-3 p-vs-c removed">
         <div class="grid-container1">
@@ -290,7 +290,9 @@
     </div>
     <footer class="footer">
       <p>Created by Bodi Ali</p>
-      <a href="https://github.com/BodiAli">Github</a>
+      <a href="https://github.com/BodiAli" target="_blank">
+        <img id="github-icon" src="./images/github.png" alt="GitHub" />
+      </a>
     </footer>
   </body>
 </html>

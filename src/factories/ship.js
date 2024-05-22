@@ -11,6 +11,10 @@ class Ship {
   isSunk() {
     return this.hitCount >= this.length;
   }
+
+  resetHitCount() {
+    this.hitCount = 0;
+  }
 }
 
 export default Ship;

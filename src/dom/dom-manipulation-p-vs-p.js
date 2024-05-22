@@ -1117,6 +1117,7 @@ class DomPvP {
     this.player2BoardShowed = false;
     toggleBoards.hideBoards = false;
 
+    this.resetShips();
     this.clearBoard();
     this.changeGameStage("Place your ships!");
 
@@ -1140,6 +1141,30 @@ class DomPvP {
     this.player1Ships = this.game.getShips().player1Ships;
     this.player2Ships = this.game.getShips().player2Ships;
     this.isVertical = false;
+  }
+
+  static resetShips() {
+    this.player1Ships.p1ShipLength4.resetHitCount();
+    this.player1Ships.p1Ship1Length3.resetHitCount();
+    this.player1Ships.p1Ship2Length3.resetHitCount();
+    this.player1Ships.p1Ship1Length2.resetHitCount();
+    this.player1Ships.p1Ship2Length2.resetHitCount();
+    this.player1Ships.p1Ship3Length2.resetHitCount();
+    this.player1Ships.p1Ship1Length1.resetHitCount();
+    this.player1Ships.p1Ship2Length1.resetHitCount();
+    this.player1Ships.p1Ship3Length1.resetHitCount();
+    this.player1Ships.p1Ship4Length1.resetHitCount();
+
+    this.player2Ships.p2ShipLength4.resetHitCount();
+    this.player2Ships.p2Ship1Length3.resetHitCount();
+    this.player2Ships.p2Ship2Length3.resetHitCount();
+    this.player2Ships.p2Ship1Length2.resetHitCount();
+    this.player2Ships.p2Ship2Length2.resetHitCount();
+    this.player2Ships.p2Ship3Length2.resetHitCount();
+    this.player2Ships.p2Ship1Length1.resetHitCount();
+    this.player2Ships.p2Ship2Length1.resetHitCount();
+    this.player2Ships.p2Ship3Length1.resetHitCount();
+    this.player2Ships.p2Ship4Length1.resetHitCount();
   }
 
   static shipsPlaced() {

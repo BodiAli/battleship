@@ -30,4 +30,15 @@ describe("Ship tests:", () => {
     ship.hit();
     expect(ship.isSunk()).toBeTruthy();
   });
+
+  test("should reset ship hitCount", () => {
+    expect(ship.hitCount).toBe(0);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBeTruthy();
+    ship.resetHitCount();
+    expect(ship.hitCount).toBe(0);
+    expect(ship.isSunk()).toBeFalsy();
+  });
 });

@@ -84,7 +84,7 @@ ul.list {
 
 header.v-1 > h1 {
   font-size: 5rem;
-  font-family: war;
+  font-family: war, sans-serif;
   background-size: 200% 200%;
   background-image: linear-gradient(45deg, #c8c8c8, var(--main-font-color), #6b6465, #c8c8c8);
   background-clip: text;
@@ -189,13 +189,13 @@ main.v-2.player-form form > input {
   outline: none;
   padding: 0.5rem;
   font-size: 1rem;
-  font-family: anton;
+  font-family: anton, sans-serif;
 }
 main.v-2.player-form form > button {
   height: 20%;
   width: fit-content;
   font-size: 1.4rem;
-  font-family: anton;
+  font-family: anton, sans-serif;
   background-image: linear-gradient(
     to right bottom,
     #696969,
@@ -309,7 +309,7 @@ header.v-2 {
 }
 
 header.v-2 > h1 {
-  font-family: war;
+  font-family: war, sans-serif;
   font-size: 2rem;
   user-select: none;
   width: fit-content;

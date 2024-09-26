@@ -11,20 +11,16 @@ class DomPvP {
   static init() {
     choosePlayerVs.playerVsPlayer = true;
     this.game = driveGame();
-    if (!choosePlayerVs.initialized) {
-      this.getPlayerTurns();
-      this.getShipsCount();
-      this.getShips();
-    }
+    this.getPlayerTurns();
+    this.getShipsCount();
+    this.getShips();
+
     this.getPlayers();
-    if (!choosePlayerVs.initialized) {
-      this.getGrids();
-    }
-    if (!choosePlayerVs.initialized) {
-      createCells(this.player1.gameBoard, this.player2.gameBoard, this.grid1, this.grid2);
-      this.cacheDom();
-      this.bindEvents();
-    }
+    this.getGrids();
+
+    createCells(this.player1.gameBoard, this.player2.gameBoard, this.grid1, this.grid2);
+    this.cacheDom();
+    this.bindEvents();
   }
 
   static getShipsCount() {
